@@ -13,8 +13,8 @@
     <div class="cta-form">
       <h2>Fill out the form!</h2>
     </div>
-    <form action="" class="form">
-      
+    <form action="/create_resource/" method="post" class="form">
+      {% csrf_token %}
       <label for="type" class="form__label">Resource type</label>
       <input type="text" placeholder="Book, video, blog..." class="form__input" id="type" required />
 
