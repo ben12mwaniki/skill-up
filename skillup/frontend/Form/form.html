@@ -22,7 +22,19 @@
       <input type="link" placeholder="https://123.com" class="form__input" id="link" required />
 
       <label for="subject" class="form__label">Subject</label>
-      <input type="text" placeholder="Web3, ML..." class="form__input" id="subject" required />
+      <select id="subject" class="form__input">
+        <option value="" disabled selected>Select a subject</option>
+        <option value="Frontend">Frontend</option>
+        <option value="Backed">Backend</option>
+        <option value="Web3">Web3</option>
+        <option value="AI/ML">AI/ML</option>
+        <option value="Data_Science">Data Science</option>
+        <option value="Cybersecurity">Cybersecurity</option>
+        <option value="Cloud">Cloud</option>
+        <option value="Game_Dev">Game Development</option>
+        <option value="Mobile_Dev">Mobile Development</option>
+        <option value="DevOps">DevOps</option>
+      </select>
 
       <button type="submit" class="submit-button">Submit</button>
       
