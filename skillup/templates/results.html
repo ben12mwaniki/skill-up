@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="colorlib.com">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400" rel="stylesheet" />
+    {% load static %}
+    <link href="{% static 'search.css' %}" rel="stylesheet" />
+    
+  </head>
+  <body>
+    <div class="s132">
+      <table style="color: #FFFFFF;">
+        {% if resources %}
+          <tr>
+            <th>Resource Type</th>
+            <th>Link</th>
+            <th>Subject</th>
+          </tr>
+          {% for resource in resources %}
+          <tr>
+            <td>{{ resource.type }}</td>
+            <td><a href="{{ resource.link }}">visit</a></td>
+            <td>{{ resource.subject }}</td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <span>No resources match criteria </span>
+        {% endif %}
+        
+        
+      </table>
+      
+    </div>
+    
+    
+  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
