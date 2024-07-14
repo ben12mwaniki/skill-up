@@ -4,7 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="UTF-8">
   <title>Resource Form</title>
-  <link rel="stylesheet" href="form.css">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'create_resource.css' %}">
+  
 
 </head>
 <body>
@@ -13,17 +15,21 @@
     <div class="cta-form">
       <h2>Fill out the form!</h2>
     </div>
-    <form action="/create_resource/" method="post" class="form">
+    <form action="/create_resource" method="post" class="form">
       {% csrf_token %}
+     
       <label for="type" class="form__label">Resource type</label>
-      <input type="text" placeholder="Book, video, blog..." class="form__input" id="type" required />
+      <input type="text" placeholder="Book, video, blog..." class="form__input" name="type" required />
 
       <label for="link" class="form__label">Link</label>
-      <input type="link" placeholder="https://123.com" class="form__input" id="link" required />
+      <input type="link" placeholder="https://123.com" class="form__input" name="link" required />
+
+      <label for="type" class="form__label">Description</label>
+      <textarea name="description" cols="50" rows="10"></textarea>
 
       <label for="subject" class="form__label">Subject</label>
-      <select id="subject" class="form__input">
-        <option value="" disabled selected>Select a subject</option>
+      <select name="subject" class="form__input" multiple>
+        <option value="" disabled selected>Select related subject(s)</option>
         <option value="Frontend">Frontend</option>
         <option value="Backed">Backend</option>
         <option value="Web3">Web3</option>
@@ -39,3 +45,7 @@
       <button type="submit" class="submit-button">Submit</button>
       
     </form>
+  </div>
+  </body>
+</html>
+

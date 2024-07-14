@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>new user</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'create_resource.css' %}">
+
+
+</head>
+
+<body>
+  <h1>Sign Up</h1>
+  <div class="container">
+    <div class="cta-form">
+      <h2>Please fill out the form </h2>
+    </div>
+    <form action="/create_user" method="post" class="form">
+      {% csrf_token %}
+
+      <label for="user_name" class="form__label">Username</label>
+      <input type="text" class="form__input" name="user_name" required />
+
+      <label for="email" class="form__label">Email</label>
+      <input type="email" class="form__input" name="email" required />
+
+      <label for="password" class="form__label">Password</label>
+      <input type="password" class="form__input" name="password" required />
+
+      <button type="submit" class="submit-button">Submit</button>
+
+    </form>
+  </div>
+</body>
+
+</html>
