@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <link rel="stylesheet" href="profile.css">
+    <script>
+        function incrementCount() {
+            let countElement = document.getElementById('resourceCount');
+            let count = parseInt(countElement.innerText);
+            countElement.innerText = count + 1;
+        }
+
+        function decrementCount() {
+            let countElement = document.getElementById('resourceCount');
+            let count = parseInt(countElement.innerText);
+            if (count > 0) {
+                countElement.innerText = count - 1;
+            }
+        }
+    </script>
+</head>
+<body>
+<section class="section about-section" id="about">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="about-text">
+                    <h3>About Me</h3>
+                    <h6 class="username">John Doe</h6>
+                    <p>A computer science student interested in data science and open source :D.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-avatar">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Profile Picture">
+                </div>
+            </div>
+        </div>
+        <div class="counter">
+            <div class="count-data text-center">
+                <h6 class="count" id="resourceCount">0</h6>
+                <p class="font-w-600">Resources Created</p>
+                <button onclick="incrementCount()">Add Resource</button>
+                <button onclick="decrementCount()">Remove Resource</button>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
