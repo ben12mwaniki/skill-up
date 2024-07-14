@@ -6,7 +6,7 @@ App for sharing resources to upskill in tech
 * Clone repo 
 * Create a virtual environment while in project root `py -m venv .venv`
 
-_Important: Good idea to work in a virtual environment to not mess up up with python installations or dependencies_
+_Important: Good idea to work in a virtual environment to not mess up with python installations or dependencies_
 
 * Activate the virtual environment
 
