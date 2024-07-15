@@ -42,8 +42,8 @@ def create_resource(request):
             "type": type,
             "link": link,
             "description": description,
-            stars: 0, 
-            ratings: 0
+            "stars": 0, 
+            "rating": 0
         }
         collection.insert_one(resource)
         return HttpResponse("<h1>Resource created successfully!</h1>")
@@ -59,7 +59,7 @@ def login(request):
         collection = dbname['users']
         user = collection.find_one({'email': email, 'password': password})
         if user:
-            return HttpResponse("<h1>Login successful!</h1>")
+            return render(request, 'search.html')
         else:
             return HttpResponse("<h1>Login failed!</h1>")
     if request.method == 'GET':
