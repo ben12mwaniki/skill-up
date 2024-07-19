@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import pymongo
+import os
 
-client = pymongo.MongoClient('mongodb+srv://hurrivan:pCowJ3o9lke1fRIO@cluster0.fq0iqud.mongodb.net/')
-
+# Connect to MongoDB
+client = pymongo.MongoClient(os.environ.get("MONGO_URI"))
 
 # Create your views here.
 def index(request):
