@@ -2,6 +2,9 @@
 # Skill-up
 App for sharing resources to upskill in tech
 
+## Prerequisites
+
+
 ## Set-up and configuration
 * Clone repo 
 * Create a virtual environment while in project root `py -m venv .venv`
