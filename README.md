@@ -13,10 +13,14 @@ _Important: Good idea to work in a virtual environment to not mess up with pytho
 
 * Activate the virtual environment
 
+  <div align="center">
+
 | OS | How |
 | ---- | ----------- |
 | Windows | .venv\Scripts\activate |
 | Linux/Mac    |source path/to/venv/bin/activate |
+
+  </div>
 
 Use `deactivate` to deactivate the virtual environment anytime
 
