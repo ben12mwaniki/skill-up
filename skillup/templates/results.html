@@ -14,15 +14,17 @@
       <table style="color: #FFFFFF;">
         {% if resources %}
           <tr>
-            <th>Resource Type</th>
+            <th>Title</th>
+            <th>Type</th>
             <th>Link</th>
             <th>Subject</th>
           </tr>
           {% for resource in resources %}
           <tr>
+            <td>{{ resource.title }}</td>
             <td>{{ resource.type }}</td>
             <td><a href="{{ resource.link }}">visit</a></td>
-            <td>{{ resource.subject }}</td>
+            <td>{{ resource.subjects }}</td>
           </tr>
           {% endfor %}
         {% else %}

@@ -30,16 +30,20 @@ def create_user(request):
 def create_resource(request):
     if request.method == 'POST':
 
+        title = request.POST.get('title')
         type = request.POST.get('type')
         link = request.POST.get('link')
-        subject = request.POST.get('subject')
+        subjects = request.POST.getlist('subjects')
         description = request.POST.get('description')
+
+        print(' '.join(subjects))
         
 
         dbname = client['skillupdb']
         collection = dbname['resources']
         resource = {
-            "subject": subject,
+            "title": title,
+            "subjects": ', '.join(subjects),
             "type": type,
             "link": link,
             "description": description,
@@ -78,15 +82,20 @@ def get_users(request):
 
 def search(request):
     if request.method == 'POST':
-        subject = request.POST.get('search')
+        search_text = request.POST.get('search_text')
         type = request.POST.get('type')
         dbname = client['skillupdb']
         collection = dbname['resources']
-        resources = collection.find({'type': type, '$text': {'$search': subject}})
-        if resources:
-            return render(request, 'results.html', {'resources': resources})
+        
+        if type == '':
+            resources = collection.find({'$text': {'$search': search_text}})
+        elif search_text == '':
+            resources = collection.find({'type': type})
         else:
-            return render(request, 'results.html', {'resources': None})
+            resources = collection.find({'$text': {'$search': search_text}, 'type': type})
+        
+        return render(request, 'results.html', {'resources': resources})
+
     if request.method == 'GET':
         return render(request, 'search.html')
     
@@ -100,11 +109,11 @@ def get_resources(request):
     return HttpResponse("<h1>Resources fetched successfully!</h1>")
 
 
-#Text index for search based on description and subject
+#Text index for search based on description and subjects
 def create_text_index():
     dbname = client['skillupdb']
     collection = dbname['resources']
-    collection.create_index([('description', 'text'), ('subject', 'text')])
+    collection.create_index([('description', 'text'), ('subjects', 'text'), ('title', 'text')]) 
 
 create_text_index()
 

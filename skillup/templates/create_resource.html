@@ -10,28 +10,39 @@
 
 </head>
 <body>
-  <h1>Create a Resource</h1>
+  <h2>Create a Resource</h2>
   <div class="container">
     <div class="cta-form">
-      <h2>Fill out the form!</h2>
     </div>
     <form action="/create_resource" method="post" class="form">
       {% csrf_token %}
+
+      <label for="title" class="form__label">Title</label>
+      <input type="text" placeholder="Cloud computing with Azure" class="form__input" name="title" required />
      
       <label for="type" class="form__label">Resource type</label>
-      <input type="text" placeholder="Book, video, blog..." class="form__input" name="type" required />
-
+      <select class="form__input" name="type" required>
+        <option value="" disabled selected>Select one</option>
+        <option value="video">Video</option>
+        <option value="blog">Blog</option>
+        <option value="book">Book</option>
+        <option value="podcast">Podcast</option>
+        <option value="newsletter">Newsletter</option>
+        <option value="course">Course</option>
+        <option value="forum">Forum</option>
+      </select>
+     
       <label for="link" class="form__label">Link</label>
       <input type="link" placeholder="https://123.com" class="form__input" name="link" required />
 
-      <label for="type" class="form__label">Description</label>
-      <textarea name="description" cols="50" rows="10"> Text</textarea>
+      <label for="description" class="form__label">Description</label>
+      <textarea placeholder="Course for beginners to advance quickly in backend development. Author is ex-meta engineer" name="description" cols="60" rows="7"></textarea>
 
-      <label for="subject" class="form__label">Subject</label>
-      <select name="subject" class="form__input" multiple>
+      <label for="subjects" class="form__label">Subject</label>
+      <select name="subjects"  size="8" multiple required>
         <option value="" disabled selected>Select related subject(s)</option>
         <option value="Frontend">Frontend</option>
-        <option value="Backed">Backend</option>
+        <option value="Backend">Backend</option>
         <option value="Web3">Web3</option>
         <option value="AI/ML">AI/ML</option>
         <option value="Data_Science">Data Science</option>
