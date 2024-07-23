@@ -3,6 +3,8 @@
 App for sharing resources to upskill in tech
 
 ## Prerequisites
+1. Python3
+
 
 
 ## Set-up and configuration
