@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Me</title>
-    <link rel="stylesheet" href="profile.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'profile.css' %}">
     <script>
         function incrementCount() {
             let countElement = document.getElementById('resourceCount');

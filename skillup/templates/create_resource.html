@@ -52,7 +52,11 @@
         <option value="Mobile_Dev">Mobile Development</option>
         <option value="DevOps">DevOps</option>
       </select>
-
+      {% if error %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+      {% endif %} 
       <button type="submit" class="submit-button">Submit</button>
       
     </form>

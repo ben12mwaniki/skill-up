@@ -6,5 +6,6 @@ urlpatterns = [
     path('create_user',views.create_user,name='create_user'),
     path('create_resource',views.create_resource,name='create_resource'),
     path('login',views.login,name='login'),
-    path('search',views.search,name='search'),
+    path('search-results',views.search,name='search-results'),
+    path('profile',views.profile,name='profile'),
     ]

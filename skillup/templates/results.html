@@ -3,16 +3,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="author" content="colorlib.com">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" /> 
     {% load static %}
-    <link href="{% static 'search.css' %}" rel="stylesheet" />
-    
+    <link href="{% static 'results.css' %}" rel="stylesheet" />
+
+    <title>skillUp Search Results</title>
   </head>
   <body>
-    <div class="s132">
-      <table style="color: #FFFFFF;">
-        {% if resources %}
+    <div class="container">
+      {% if resources|length > 0 %}
+      <table class="table table-striped" style="color: #070707;">
+          <caption>List of resources </caption>
           <tr>
             <th>Title</th>
             <th>Type</th>
@@ -27,15 +28,11 @@
             <td>{{ resource.subjects }}</td>
           </tr>
           {% endfor %}
-        {% else %}
-          <span>No resources match criteria </span>
-        {% endif %}
-        
-        
       </table>
-      
+      {% else %}
+          <h2> No resource matches criteria </h2> 
+      {% endif %}
     </div>
     
-    
-  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+  </body>
 </html>
