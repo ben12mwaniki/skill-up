@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import redirect
 import pymongo
 import os
 
@@ -8,7 +9,7 @@ client = pymongo.MongoClient(os.environ.get("MONGO_URI"))
 
 # Create your views here.
 def index(request):
-    return HttpResponse("<h1>Hello and welcome to <u>Skill UP</u> project!</h1>")
+    return render(request, 'index.html')
 
 def create_user(request):
     if request.method == 'POST':
@@ -22,8 +23,13 @@ def create_user(request):
             "email": email,
             "password": password
         }
-        collection.insert_one(user)
-        return HttpResponse("<h1>User created successfully!</h1>")
+
+        try:
+            collection.insert_one(user)
+            return redirect('/login')
+        except pymongo.errors.DuplicateKeyError:
+            return render(request, 'create_user.html', {'error': 'Email already exists!'})
+
     if request.method == 'GET':
         return render(request, 'create_user.html')
 
@@ -50,8 +56,13 @@ def create_resource(request):
             "stars": 0, 
             "rating": 0
         }
-        collection.insert_one(resource)
-        return HttpResponse("<h1>Resource created successfully!</h1>")
+        try:
+            collection.insert_one(resource)
+            return HttpResponse("<h1>Resource created successfully!</h1>")
+        except Exception as e:
+            print(e)
+            return render(request, 'create_resource.html', {'error': 'Error creating resource!'})
+
     if request.method == 'GET':
         return render(request, 'create_resource.html')
     
@@ -64,12 +75,15 @@ def login(request):
         collection = dbname['users']
         user = collection.find_one({'email': email, 'password': password})
         if user:
-            return render(request, 'search.html')
+            return redirect('/profile', {'user': user})
         else:
-            return HttpResponse("<h1>Login failed!</h1>")
+            return render(request, 'login.html', {'error': 'Invalid email or password'})
     if request.method == 'GET':
         return render(request, 'login.html')
-    
+def profile(request):
+    if request.method == 'GET':
+        # Check if user is logged in
+        return render(request, 'profile.html')    
 
 def get_users(request):
     dbname = client['skillupdb']
@@ -93,11 +107,11 @@ def search(request):
             resources = collection.find({'type': type})
         else:
             resources = collection.find({'$text': {'$search': search_text}, 'type': type})
-        
-        return render(request, 'results.html', {'resources': resources})
+            
+        return render(request, 'results.html', {'resources':list(resources)})
 
     if request.method == 'GET':
-        return render(request, 'search.html')
+        return redirect('/')
     
 def get_resources(request):
     dbname = client['skillupdb']
@@ -109,13 +123,21 @@ def get_resources(request):
     return HttpResponse("<h1>Resources fetched successfully!</h1>")
 
 
-#Text index for search based on description and subjects
+# Text index for search based on description and subjects
 def create_text_index():
     dbname = client['skillupdb']
     collection = dbname['resources']
     collection.create_index([('description', 'text'), ('subjects', 'text'), ('title', 'text')]) 
 
+# Ensure email is unique
+def create_unique_email_index():
+    dbname = client['skillupdb']
+    collection = dbname['users']
+    collection.create_index([('email',1)], unique=True)
+    
 create_text_index()
+create_unique_email_index()
+
 
 
 

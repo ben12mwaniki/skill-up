@@ -6,6 +6,8 @@ html {
     -webkit-text-size-adjust: 100%;
     /* 2 */
   }
+
+
   
   /* Sections
      ========================================================================== */
@@ -1006,6 +1008,18 @@ html {
     outline: 0;
     box-shadow: none;
   }
+
+  .centered{
+    margin: auto;
+    width: 50%;
+
+  }
+  .topcorner{
+    font: #fff;
+    position: absolute;
+    width: 100px; 
+    float: right;
+   }
   
   @media screen and (max-width: 992px) {
     .s132 form .inner-form .input-field {
