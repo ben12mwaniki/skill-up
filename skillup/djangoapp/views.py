@@ -3,9 +3,11 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 import pymongo
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Connect to MongoDB
-client = pymongo.MongoClient(os.environ.get("MONGO_URI"))
+client = pymongo.MongoClient(os.getenv('MONGO_URI'))
 
 # Create your views here.
 def index(request):
