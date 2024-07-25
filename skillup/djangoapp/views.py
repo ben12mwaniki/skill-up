@@ -42,25 +42,28 @@ def create_resource(request):
         type = request.POST.get('type')
         link = request.POST.get('link')
         subjects = request.POST.getlist('subjects')
-        description = request.POST.get('description')
+        description = request.POST.get('description') 
 
-        print(' '.join(subjects))
-        
+        resource = {
+            "title": title,
+            "type": type,
+            "link": link,
+            "author":"",
+            "subjects": ', '.join(subjects),
+            "description": description,
+            "stars_total": 0, 
+            "star_rating": 0,
+            "raters":0,
+            "comments": []
+            
+        }
 
         dbname = client['skillupdb']
         collection = dbname['resources']
-        resource = {
-            "title": title,
-            "subjects": ', '.join(subjects),
-            "type": type,
-            "link": link,
-            "description": description,
-            "stars": 0, 
-            "rating": 0
-        }
+       
         try:
             collection.insert_one(resource)
-            return HttpResponse("<h1>Resource created successfully!</h1>")
+            return redirect('/profile')
         except Exception as e:
             print(e)
             return render(request, 'create_resource.html', {'error': 'Error creating resource!'})
@@ -114,6 +117,8 @@ def search(request):
 
     if request.method == 'GET':
         return redirect('/')
+def get_resource(request):
+    return render(request, 'resource.html')    
     
 def get_resources(request):
     dbname = client['skillupdb']

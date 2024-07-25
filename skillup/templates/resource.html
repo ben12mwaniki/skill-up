@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>resource-info</title>
+    {% load static %}
+    <link href="{% static 'resource.css' %}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <button class="toggle-button" onclick="toggleMode()">Toggle Dark/Light Mode</button>
+    
+    <div class="content" >
+        <div class="d-flex header-container justify-content-center">
+            <h3>Python by MIT ★★★✰✰(23)</h3> 
+        </div>
+
+        <div class="resource">
+            <div>
+                <b>Type: </b> Video
+            </div>
+              <div>
+                 <b>Author:</b>  Jane Doe
+              </div>
+              <div>
+               <b>Link:</b>    www.example.com
+              </div>
+              <div>
+                <b>Subjects:</b>   Web Development, Backend
+              </div>
+              <div>
+                <b>Description:</b>
+                <div>
+                  This is a resource that will help you learn how to build a website from scratch. It covers the basics of HTML, CSS, and JavaScript.
+                  This is a resource that will help you learn how to build a website from scratch. It covers the basics of HTML, CSS, and JavaScript.
+                  This is a resource that will help you learn how to build a website from scratch. It covers the basics of HTML, CSS, and JavaScript.
+                </div>
+                 
+              </div>
+
+              <div class="d-flex justify-content-between">  
+                <button class="btn-submit">Save</button> 
+                <button class="btn-submit">Rate</button>   
+            </div>
+    
+        </div>
+        
+
+            <div class="comment">
+                <h4>Comments</h4>
+
+                <div class="comment-header">
+                    <div> John Doe <em> (2 days ago)</em> </div>
+                   
+                </div>
+                <div class="comment-body">
+                    This is a great resource! I learned a lot from it.
+                </div> 
+                
+                <h6>
+                    <label for="comment">Add comment:</label>
+                </h6>
+                <textarea name="comment" cols="60" rows="5"> </textarea>
+                <button class="btn-submit">Submit</button>
+                
+            </div>     
+
+        
+
+        
+           
+    </div>
+
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+
+            // Toggle button and resource elements between light and dark mode
+            const btnSubmit = document.querySelector('.btn-submit');
+            btnSubmit.classList.toggle('light-mode');
+            btnSubmit.classList.toggle('dark-mode');
+        }
+    </script>
+</body>
+</html>
