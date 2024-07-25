@@ -28,8 +28,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://skillup-1-07e7f76e6c28.herokuapp.com', ' http://127.0.0.1:8000/','127.0.0.1','localhost']
-CSRF_TRUSTED_ORIGINS = ['https://skillup-1-07e7f76e6c28.herokuapp.com'] 
+ALLOWED_HOSTS = ['https://skillup-1-a33a20b30d96.herokuapp.com/', ' http://127.0.0.1:8000/','127.0.0.1','localhost']
+CSRF_TRUSTED_ORIGINS = ['https://skillup-1-a33a20b30d96.herokuapp.com/'] 
 
 
 # Application definition
