@@ -1,1 +1,1 @@
-web: cd skillup; waitress-serve --port=8000 skillup.wsgi:application
+web: cd skillup; waitress-serve --port=$PORT skillup.wsgi:application
