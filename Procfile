@@ -1,0 +1,1 @@
+web: cd skillup; waitress-serve --port=8000 skillup.wsgi:application
