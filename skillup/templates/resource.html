@@ -12,35 +12,36 @@
     
     <div class="content" >
         <div class="d-flex header-container justify-content-center">
-            <h3>Python by MIT ★★★✰✰(23)</h3> 
+            <h3>{{resource.title}} stars: {{resource.star_rating}} </h3> 
         </div>
-
+        <!--★★★✰✰(23) To be used for stars   -->
         <div class="resource">
             <div>
-                <b>Type: </b> Video
+                <b>Type: </b> {{resource.type}}
             </div>
               <div>
-                 <b>Author:</b>  Jane Doe
+                 <b>Author:</b>  {{resource.author}}
               </div>
               <div>
-               <b>Link:</b>    www.example.com
+               <b>Link:</b>   <a href="{{resource.link}}"> visit</a> 
               </div>
               <div>
-                <b>Subjects:</b>   Web Development, Backend
+                <b>Subjects:</b>   {{resource.subjects}}
               </div>
               <div>
                 <b>Description:</b>
                 <div>
-                  This is a resource that will help you learn how to build a website from scratch. It covers the basics of HTML, CSS, and JavaScript.
-                  This is a resource that will help you learn how to build a website from scratch. It covers the basics of HTML, CSS, and JavaScript.
-                  This is a resource that will help you learn how to build a website from scratch. It covers the basics of HTML, CSS, and JavaScript.
+                    {{resource.description}}
                 </div>
                  
               </div>
 
               <div class="d-flex justify-content-between">  
-                <button class="btn-submit">Save</button> 
-                <button class="btn-submit">Rate</button>   
+                <button class="btn-submit">Save</button>
+                
+                {% if user.is_authenticated %}
+                    <button class="btn-submit">Rate</button>
+                {% endif %} 
             </div>
     
         </div>
@@ -64,10 +65,6 @@
                 <button class="btn-submit">Submit</button>
                 
             </div>     
-
-        
-
-        
            
     </div>
 

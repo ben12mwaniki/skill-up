@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" /> 
     {% load static %}
     <link href="{% static 'results.css' %}" rel="stylesheet" />
+    {% load mongofilters %}
 
     <title>skillUp Search Results</title>
   </head>
@@ -22,8 +23,9 @@
             <th>Rating</th>
           </tr>
           {% for resource in resources %}
+         
           <tr>
-            <td> <a href=" ">{{ resource.title }} </a></td>
+            <td> <a href="resource/{{ resource|mongo_id}}">{{ resource.title }} </a></td>
             <td>{{ resource.type }}</td>
             <td><a href="{{ resource.link }}">visit</a></td>
             <td>{{ resource.subjects }}</td>

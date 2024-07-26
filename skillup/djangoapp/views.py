@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from bson.objectid import ObjectId
+from django.contrib.auth.models import User
 import pymongo
 import os
 from dotenv import load_dotenv
@@ -85,6 +87,7 @@ def login(request):
             return render(request, 'login.html', {'error': 'Invalid email or password'})
     if request.method == 'GET':
         return render(request, 'login.html')
+
 def profile(request):
     if request.method == 'GET':
         # Check if user is logged in
@@ -117,8 +120,18 @@ def search(request):
 
     if request.method == 'GET':
         return redirect('/')
-def get_resource(request):
-    return render(request, 'resource.html')    
+
+def get_resource(request, id):
+    dbname = client['skillupdb']
+    collection = dbname['resources']
+    print(id)
+    try:
+        resource = collection.find_one({'_id': ObjectId(id)})
+        print(resource)
+        return render(request, 'resource.html', {'resource': resource})  
+    except Exception as e:
+        print(e)
+        return HttpResponse("<h1>Resource not found! Try again later</h1>")    
     
 def get_resources(request):
     dbname = client['skillupdb']
@@ -144,6 +157,7 @@ def create_unique_email_index():
     
 create_text_index()
 create_unique_email_index()
+
 
 
 
