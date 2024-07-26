@@ -124,10 +124,8 @@ def search(request):
 def get_resource(request, id):
     dbname = client['skillupdb']
     collection = dbname['resources']
-    print(id)
     try:
         resource = collection.find_one({'_id': ObjectId(id)})
-        print(resource)
         return render(request, 'resource.html', {'resource': resource})  
     except Exception as e:
         print(e)
