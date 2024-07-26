@@ -62,7 +62,7 @@ ROOT_URLCONF = 'skillup.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+       'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # 'DIRS': [],
         # 'APP_DIRS': True,
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
@@ -87,9 +87,13 @@ WSGI_APPLICATION = 'skillup.wsgi.application'
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
+#             'ENGINE': 'djongo',
+#             'NAME': 'skillupdb',
+#             'ENFORCE_SCHEMA': False,
+#             'CLIENT': {
+#                 'host': os.getenv('MONGO_URI'),
+#             }  
+#         }
 # }
 
 

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from bson.objectid import ObjectId
+from django.contrib.auth.models import User
 import pymongo
 import os
 from dotenv import load_dotenv
@@ -42,25 +44,28 @@ def create_resource(request):
         type = request.POST.get('type')
         link = request.POST.get('link')
         subjects = request.POST.getlist('subjects')
-        description = request.POST.get('description')
+        description = request.POST.get('description') 
 
-        print(' '.join(subjects))
-        
+        resource = {
+            "title": title,
+            "type": type,
+            "link": link,
+            "author":"",
+            "subjects": ', '.join(subjects),
+            "description": description,
+            "stars_total": 0, 
+            "star_rating": 0,
+            "raters":0,
+            "comments": []
+            
+        }
 
         dbname = client['skillupdb']
         collection = dbname['resources']
-        resource = {
-            "title": title,
-            "subjects": ', '.join(subjects),
-            "type": type,
-            "link": link,
-            "description": description,
-            "stars": 0, 
-            "rating": 0
-        }
+       
         try:
             collection.insert_one(resource)
-            return HttpResponse("<h1>Resource created successfully!</h1>")
+            return redirect('/profile')
         except Exception as e:
             print(e)
             return render(request, 'create_resource.html', {'error': 'Error creating resource!'})
@@ -82,6 +87,7 @@ def login(request):
             return render(request, 'login.html', {'error': 'Invalid email or password'})
     if request.method == 'GET':
         return render(request, 'login.html')
+
 def profile(request):
     if request.method == 'GET':
         # Check if user is logged in
@@ -114,6 +120,18 @@ def search(request):
 
     if request.method == 'GET':
         return redirect('/')
+
+def get_resource(request, id):
+    dbname = client['skillupdb']
+    collection = dbname['resources']
+    print(id)
+    try:
+        resource = collection.find_one({'_id': ObjectId(id)})
+        print(resource)
+        return render(request, 'resource.html', {'resource': resource})  
+    except Exception as e:
+        print(e)
+        return HttpResponse("<h1>Resource not found! Try again later</h1>")    
     
 def get_resources(request):
     dbname = client['skillupdb']
@@ -139,6 +157,7 @@ def create_unique_email_index():
     
 create_text_index()
 create_unique_email_index()
+
 
 
 
