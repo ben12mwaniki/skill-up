@@ -3,7 +3,9 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from bson.objectid import ObjectId
 from django.contrib.auth.models import User
-from djangoapp.models import Student, Skill
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.db.utils import IntegrityError
 import pymongo
 import os
 from dotenv import load_dotenv
@@ -12,7 +14,8 @@ load_dotenv()
 # Connect to MongoDB
 client = pymongo.MongoClient(os.getenv('MONGO_URI'))
 
-# Create your views here.
+
+
 def index(request):
     return render(request, 'index.html')
 
@@ -21,23 +24,22 @@ def create_user(request):
         user_name = request.POST.get('user_name')
         email = request.POST.get('email')
         password = request.POST.get('password') 
-        dbname = client['skillupdb']
-        collection = dbname['users']
-        user = {
-            "user_name": user_name,
-            "email": email,
-            "password": password
-        }
-
+        
         try:
-            collection.insert_one(user)
+            user = User.objects.create_user(user_name, email, password)
+            user.save()
             return redirect('/login')
-        except pymongo.errors.DuplicateKeyError:
-            return render(request, 'create_user.html', {'error': 'Email already exists!'})
+        except IntegrityError as e:
+            if "auth_user_username_key" in str(e):
+                return render(request, 'create_user.html', {'error': 'Username already exists!'})
+            else:
+                return render(request, 'create_user.html', {'error': 'An error occured while creating user!'})
+        
 
     if request.method == 'GET':
         return render(request, 'create_user.html')
 
+@login_required
 def create_resource(request):
     if request.method == 'POST':
 
@@ -51,7 +53,7 @@ def create_resource(request):
             "title": title,
             "type": type,
             "link": link,
-            "author":"",
+            "author": request.user.username,
             "subjects": ', '.join(subjects),
             "description": description,
             "stars_total": 0, 
@@ -67,41 +69,41 @@ def create_resource(request):
         try:
             collection.insert_one(resource)
             return redirect('/profile')
-        except Exception as e:
-            print(e)
+        except Exception:
             return render(request, 'create_resource.html', {'error': 'Error creating resource!'})
 
     if request.method == 'GET':
         return render(request, 'create_resource.html')
     
     
-def login(request):
+def login_view(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        username = request.POST.get('user_name')
         password = request.POST.get('password')
-        dbname = client['skillupdb']
-        collection = dbname['users']
-        user = collection.find_one({'email': email, 'password': password})
-        if user:
-            return redirect('/profile', {'user': user})
+
+        user = authenticate(username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            if request.GET.get('next') != None:
+                return redirect(request.GET.get('next'))
+            else: 
+                return redirect('/profile',)
         else:
-            return render(request, 'login.html', {'error': 'Invalid email or password'})
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
     if request.method == 'GET':
         return render(request, 'login.html')
+    
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
+@login_required
 def profile(request):
     if request.method == 'GET':
-        # Check if user is logged in
-        return render(request, 'profile.html')    
-
-def get_users(request):
-    dbname = client['skillupdb']
-    collection = dbname['users']
-    users = collection.find()
-    
-    for user in users:
-        print(user)     
-    return HttpResponse("<h1>Users fetched successfully!</h1>")
+        return render(request, 'profile.html')
+    if request.method == 'POST':
+        pass
 
 def search(request):
     if request.method == 'POST':
@@ -116,7 +118,7 @@ def search(request):
             resources = collection.find({'type': type})
         else:
             resources = collection.find({'$text': {'$search': search_text}, 'type': type})
-            
+          
         return render(request, 'results.html', {'resources':list(resources)})
 
     if request.method == 'GET':
@@ -135,35 +137,21 @@ def get_resource(request, id):
 def get_resources(request):
     dbname = client['skillupdb']
     collection = dbname['resources']
-    resources = collection.find({'type': "video"})
+    resources = collection.find()
     
     for resource in resources:
         print(resource)     
     return HttpResponse("<h1>Resources fetched successfully!</h1>")
-
 
 # Text index for search based on description and subjects
 def create_text_index():
     dbname = client['skillupdb']
     collection = dbname['resources']
     collection.create_index([('description', 'text'), ('subjects', 'text'), ('title', 'text')]) 
-
-# Ensure email is unique
-def create_unique_email_index():
-    dbname = client['skillupdb']
-    collection = dbname['users']
-    collection.create_index([('email',1)], unique=True)
     
-create_text_index()
-create_unique_email_index()
 
-#Test user creation
-#user = User.objects.create_user("john", "lennon@thebeatles.com", "johnpassword")
-# student = Student(name="John", email="dk@kss.com", phone="1234567890")
-# skill = Skill(name="Python", description="Python programming")
-# skill.save()
-# student.save()
-# #user.save()
+create_text_index()
+
 
 
 

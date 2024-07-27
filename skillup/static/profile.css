@@ -10,6 +10,12 @@ body {
     padding: 60px 0;
 }
 
+.topcorner{
+    position:absolute;
+    top:0;
+    right:0;
+   }
+   
 .about-section {
     background-color: #fff;
 }
