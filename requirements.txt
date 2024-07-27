@@ -1,9 +1,12 @@
 asgiref==3.8.1
-Django==5.0.7
+dj-database-url==2.2.0
+Django==4.1.13
 dnspython==2.6.1
+psycopg2==2.9.9
 pymongo==4.8.0
 python-dotenv==1.0.1
-sqlparse==0.5.0
+sqlparse==0.2.4
+typing_extensions==4.12.2
 tzdata==2024.1
 waitress==3.0.0
 whitenoise==6.7.0
