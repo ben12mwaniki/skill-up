@@ -11,8 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import os
 from dotenv import load_dotenv
+import dj_database_url
+import os
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -85,17 +87,11 @@ WSGI_APPLICATION = 'skillup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#             'ENGINE': 'djongo',
-#             'NAME': 'skillupdb',
-#             'ENFORCE_SCHEMA': False,
-#             'CLIENT': {
-#                 'host': os.getenv('MONGO_URI'),
-#             }  
-#         }
-# }
-
+DATABASES = {
+    'default': 
+           dj_database_url.config(default=os.getenv('POSTGRES_URI'))
+}
+print(DATABASES)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

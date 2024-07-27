@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from bson.objectid import ObjectId
 from django.contrib.auth.models import User
+from djangoapp.models import Student, Skill
 import pymongo
 import os
 from dotenv import load_dotenv
@@ -155,6 +156,14 @@ def create_unique_email_index():
     
 create_text_index()
 create_unique_email_index()
+
+#Test user creation
+#user = User.objects.create_user("john", "lennon@thebeatles.com", "johnpassword")
+# student = Student(name="John", email="dk@kss.com", phone="1234567890")
+# skill = Skill(name="Python", description="Python programming")
+# skill.save()
+# student.save()
+# #user.save()
 
 
 
