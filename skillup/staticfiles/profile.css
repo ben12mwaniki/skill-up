@@ -1,16 +1,13 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #262222;
     color: #333;
     margin: 0;
     padding: 0;
 }
 
-.section {
-    padding: 60px 0;
-}
-
 .about-section {
+    padding: 60px 0;
     background-color: #fff;
 }
 
@@ -18,22 +15,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
-}
-
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.col-lg-6 {
-    flex: 0 0 auto;
-    width: 50%;
-}
-
-.about-text h3, .about-text h6, .about-text p {
-    margin: 10px 0;
-}
+}   
 
 .about-text h3 {
     font-size: 24px;
@@ -50,34 +32,9 @@ body {
     color: #666;
 }
 
-.about-text mark {
-    background-color: #000;
-    color: #fff;
-    padding: 0 5px;
-}
-
 .about-avatar img {
     border-radius: 50%;
     max-width: 100%;
-}
-
-.counter {
-    margin-top: 40px;
-}
-
-.count-data {
-    margin: 20px 0;
-    text-align: center;
-}
-
-.count-data h6 {
-    font-size: 32px;
-    color: #000;
-}
-
-.count-data p {
-    font-size: 14px;
-    color: #555;
 }
 
 button {
@@ -91,4 +48,33 @@ button {
 
 button:hover {
     background-color: #555;
+}
+
+.table {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.table h4 {
+    color: #000;
+}
+
+.delete-button {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #d9534f;
+    color: #fff;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #c9302c;
+}
+
+.delete-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
 }
