@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from bson.objectid import ObjectId
 from django.contrib.auth.models import User
+from djangoapp.models import Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
@@ -27,12 +28,18 @@ def create_user(request):
         
         try:
             user = User.objects.create_user(user_name, email, password)
+            profile = Profile(user=user)
+            profile.saved_resources = []
+            profile.created_resources = []
+            profile.save()
             user.save()
+            
             return redirect('/login')
         except IntegrityError as e:
             if "auth_user_username_key" in str(e):
                 return render(request, 'create_user.html', {'error': 'Username already exists!'})
             else:
+                print(e)
                 return render(request, 'create_user.html', {'error': 'An error occured while creating user!'})
         
 
@@ -67,8 +74,11 @@ def create_resource(request):
         collection = dbname['resources']
        
         try:
-            collection.insert_one(resource)
-            return redirect('/profile')
+            inserted_id = collection.insert_one(resource).inserted_id
+            profile = request.user.profile
+            profile.created_resources.append(str(inserted_id))
+            profile.save()
+            return redirect('/profile')   
         except Exception:
             return render(request, 'create_resource.html', {'error': 'Error creating resource!'})
 
@@ -101,7 +111,20 @@ def logout_view(request):
 @login_required
 def profile(request):
     if request.method == 'GET':
-        return render(request, 'profile.html')
+        profile = request.user.profile
+        saved_resources = profile.saved_resources
+        created_resources = profile.created_resources
+
+        if saved_resources != None:
+            for i in range(len(saved_resources)):
+                saved_resources[i] = client['skillupdb']['resources'].find_one({'_id': ObjectId(saved_resources[i])})
+        if created_resources != None:
+            for i in range(len(created_resources)):
+                created_resources[i] = client['skillupdb']['resources'].find_one({'_id': ObjectId(created_resources[i])})
+
+        return render(request, 'profile.html', {'saved_resources': saved_resources, 'created_resources': created_resources})
+         
+
     if request.method == 'POST':
         pass
 

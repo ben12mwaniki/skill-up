@@ -1,21 +1,17 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
-class Skill(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-   # image = models.ImageField(upload_to='images/')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    about = models.TextField()
+    saved_resources = ArrayField(models.TextField())
+    created_resources = ArrayField(models.TextField())
 
-class Student(models.Model):
-    name = models.CharField(max_length=100) 
-    email = models.EmailField()
-    phone = models.CharField(max_length=15)
-    skills = models.ManyToManyField(Skill)
-    created_at = models.DateTimeField(auto_now_add=True)    
+    def __str__(self):  
+        return self.user.username
+     
 
-    def __str__(self):
-        return self.name        
-    
+
