@@ -1,0 +1,93 @@
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: Arial, sans-serif;
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+
+
+.content {
+   padding-left: 250px;
+   padding-right: 250px;
+}
+
+.content .resource{
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    padding: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 10px;
+}
+.content .comment{
+    padding: 30px;
+
+    .comment-header {
+        color: blue;
+    }
+
+}
+
+
+
+.dark-mode .btn,
+.dark-mode .btn-submit {
+    background-color: #555555;
+    color: #ffffff;
+}
+.dark-mode .content .resource{
+    background-color: #111111;
+    border: 1px solid #444444;
+}
+
+.header-container {
+    margin-top: 50px;
+}
+
+.toggle-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.btn-submit {
+    width: 75px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.btn-submit.light-mode {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.btn-submit.dark-mode {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.btn-submit:hover {
+    background-color: #333333;
+}
+
+.btn-submit.light-mode:hover {
+    background-color: #666666;
+}
+
+.btn-submit.dark-mode:hover {
+    background-color: #dddddd;
+}
