@@ -15,10 +15,14 @@ from dotenv import load_dotenv
 import dj_database_url
 import os
 
+# AuthO
+from dotenv import load_dotenv, find_dotenv
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+TEMPLATE_DIR = os.path.join(BASE_DIR, "webappexample", "templates")
 
 
 # Quick-start development settings - unsuitable for production
@@ -67,7 +71,7 @@ TEMPLATES = [
        'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # 'DIRS': [],
         # 'APP_DIRS': True,
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), TEMPLATE_DIR],
         'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
@@ -137,3 +141,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 
+# Load environment definition file
+ENV_FILE = find_dotenv()
+if ENV_FILE:
+    load_dotenv(ENV_FILE)
+
+
+# Load Auth0 application settings into memory
+AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
+AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
+AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")

@@ -10,4 +10,5 @@ urlpatterns = [
     path('search-results',views.search,name='search-results'),
     path('profile',views.profile,name='profile'),
     path('resource/<str:id>',views.get_resource,name='resource'),
+    path('callback', views.callback, name='callback'),
     ]

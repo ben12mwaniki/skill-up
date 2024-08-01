@@ -10,3 +10,6 @@ typing_extensions==4.12.2
 tzdata==2024.1
 waitress==3.0.0
 whitenoise==6.7.0
+
+authlib ~= 1.0
+requests ~= 2.27

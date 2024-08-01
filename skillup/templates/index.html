@@ -4,12 +4,23 @@
   {% load static %}
   <meta charset="UTF-8">
   <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-  <title>skillUp</title>
+  <title>SkillUp</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="{% static 'index.css' %}">
 </head>
 
 <body>
+
+<!-- AuthO code for something  -->
+  {% if session %}
+    <h1>Welcome {{session.userinfo.name}}!</h1>
+    <p><a href="{% url 'logout' %}">Logout</a></p>
+    <div><pre>{{pretty}}</pre></div>
+    {% else %}
+    <h1>Welcome Guest</h1>
+    <p><a href="{% url 'login' %}">Login</a></p>
+    {% endif %}
+    
   <a  href="/login" class="topcorner btn btn-primary" role="button"> Login</a>
   
   <form class="container" action="/search-results" method="post">
