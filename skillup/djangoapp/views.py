@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
 import pymongo
 import os
+import json
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -148,14 +149,55 @@ def search(request):
         return redirect('/')
 
 def get_resource(request, id):
-    dbname = client['skillupdb']
-    collection = dbname['resources']
-    try:
-        resource = collection.find_one({'_id': ObjectId(id)})
-        return render(request, 'resource.html', {'resource': resource})  
-    except Exception as e:
-        print(e)
-        return HttpResponse("<h1>Resource not found! Try again later</h1>")    
+    if request.method == 'GET':
+        dbname = client['skillupdb']
+        collection = dbname['resources']
+        try:
+            resource = collection.find_one({'_id': ObjectId(id)})
+            return render(request, 'resource.html', {'resource': resource})  
+        except Exception as e:
+            print(e)
+            return HttpResponse("<h1>Resource not found! Try again later</h1>")
+    
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        if data['action'] == 'save':
+            if request.user.is_authenticated:
+                profile = request.user.profile
+                if id not in profile.saved_resources:
+                    profile.saved_resources.append(id)
+                    profile.save()
+                return HttpResponse('Success')
+            else:
+                return HttpResponse('Unauthorized', status=401)
+            
+        # To be tested
+        if data['action'] == 'rate':
+            data = json.loads(request.body)
+            if request.user.is_authenticated:
+                rating = int(request.POST.get('rating'))
+                resource = collection.find_one({'_id': ObjectId(id)})
+                stars_total = resource['stars_total'] + rating
+                raters = resource['raters'] + 1
+                star_rating = stars_total / raters
+                collection.update_one({'_id': ObjectId(id)}, {'$set': {'stars_total': stars_total, 'star_rating': star_rating, 'raters': raters}})
+                return redirect('/resource/'+id)
+            else:
+                return redirect('/login?next=/resource/'+id)
+        
+        # To be tested    
+        if data['action'] == 'comment':
+            data = json.loads(request.body)
+            if request.user.is_authenticated:
+                comment = request.POST.get('comment')
+                resource = collection.find_one({'_id': ObjectId(id)})
+                comments = resource['comments']
+                comments.append({'author': request.user.username, 'comment': comment})
+                collection.update_one({'_id': ObjectId(id)}, {'$set': {'comments': comments}})
+                return redirect('/resource/'+id)
+            else:
+                return redirect('/login?next=/resource/'+id)
+    
     
 def get_resources(request):
     dbname = client['skillupdb']
