@@ -39,12 +39,13 @@
       <textarea placeholder="Course for beginners to advance quickly in backend development. Author is ex-meta engineer" name="description" cols="60" rows="7"></textarea>
 
       <label for="subjects" class="form__label">Subject</label>
-      <select name="subjects"  size="8" multiple required>
+      <select id="subjects" name="subjects" size="8" multiple required>
         <option value="" disabled selected>Select related subject(s)</option>
         <option value="Frontend">Frontend</option>
         <option value="Backend">Backend</option>
+        <option value="Full_Stack">Full Stack</option>
         <option value="Web3">Web3</option>
-        <option value="AI/ML">AI/ML</option>
+        <option value="AI_ML">AI/ML</option>
         <option value="Data_Science">Data Science</option>
         <option value="Cybersecurity">Cybersecurity</option>
         <option value="Cloud">Cloud</option>
@@ -52,6 +53,7 @@
         <option value="Mobile_Dev">Mobile Development</option>
         <option value="DevOps">DevOps</option>
       </select>
+
       {% if error %}
       <div class="alert alert-danger" role="alert">
         {{ error }}
