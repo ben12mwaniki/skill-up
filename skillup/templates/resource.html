@@ -35,7 +35,7 @@
                  <b>Author:</b>  {{resource.author}}
               </div>
               <div>
-               <b>Link:</b>   <a href="{{resource.link}}"> visit</a> 
+               <b>Link:</b>   <a href="{{resource.link}}" target="_blank" rel="noopener noreferrer" > visit</a> 
               </div>
               <div>
                 <b>Subjects:</b>   {{resource.subjects}}
@@ -102,9 +102,9 @@
                 {% endfor %}
                 
                 
-                <h6>
+                <h5>
                     <label for="comment_text">Add comment:</label>
-                </h6>
+                </h5>
                 <textarea id="comment_text" name="comment_text" placeholder="Your comment here" cols="60" rows="5" required></textarea>
                 <button class="btn-submit" onclick="addComment()">Submit</button>
 

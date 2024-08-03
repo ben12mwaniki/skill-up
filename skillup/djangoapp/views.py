@@ -156,6 +156,15 @@ def search(request):
     if request.method == 'GET':
         return redirect('/')
 
+
+"""
+    Get a single resource by id
+    Allow users to save resource
+    Allow users to rate resource
+    Allow users to comment on resource
+    Allow users to remove resource from saved
+    Allow author to delete resource
+"""
 def get_resource(request, id):
     if request.method == 'GET':
         dbname = client['skillupdb']
@@ -243,6 +252,47 @@ def get_resource(request, id):
                     print(e)
                     return HttpResponse('Error saving comment!', status=500)    
                 
+            else:
+                return HttpResponse('Unauthorized', status=401)
+            
+    if request.method == 'DELETE':
+        data = json.loads(request.body)
+
+        if data['action'] == 'delete':
+            if request.user.is_authenticated:
+                dbname = client['skillupdb']
+                collection = dbname['resources']
+                resource = collection.find_one({'_id': ObjectId(id)})
+
+                if request.user.username == resource['author']:
+                    collection.delete_one({'_id': ObjectId(id)})
+
+                    # Remove resource from profile
+                    profile = request.user.profile 
+                    profile.created_resources.remove(id)
+                    profile.save()
+
+                    # Remove resource from saved resources of all users
+                    users = User.objects.all()
+                    
+                    for user in users:
+                        if id in user.profile.saved_resources:
+                            user.profile.saved_resources.remove(id)
+                            user.profile.save()
+
+                    return HttpResponse('Success')
+                else:
+                    return HttpResponse('Forbidden', status=403)
+            else:
+                return HttpResponse('Unauthorized', status=401)
+                   
+        if data['action'] == 'remove_from_profile':
+            if request.user.is_authenticated:
+                profile = request.user.profile
+                if id in profile.saved_resources:
+                    profile.saved_resources.remove(id)
+                    profile.save()
+                return HttpResponse('Success')
             else:
                 return HttpResponse('Unauthorized', status=401)
     
