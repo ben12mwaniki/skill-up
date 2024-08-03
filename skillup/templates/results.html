@@ -1,20 +1,24 @@
-<html>
+{% extends 'base.html' %}
+{% load mongofilters %}
+{% load static %}
+
+{% block content %}
+
   <head>
-    {% load static %}
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" /> 
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <link href="{% static 'results.css' %}" rel="stylesheet" />
-    {% load mongofilters %}
-
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>skillUp Search Results</title>
   </head>
-  <body>
+  <div>
     <div class="container">
       {% if resources|length > 0 %}
-      <table class="table table-striped" style="color: #070707;">
+      <table class="table table-striped">
           
           <tr>
             <th>Title</th>
@@ -30,7 +34,17 @@
             <td>{{ resource.type }}</td>
             <td><a href="{{ resource.link }}">visit</a></td>
             <td>{{ resource.subjects }}</td>
-            <td>{{ resource.star_rating }}</td>
+            <td>
+              {% for i in range %}
+                    {% if i <= resource.star_rating|round %}
+                      <i class="fa fa-star fa-fw highlight-stars"></i> 
+                    {% else %}
+                       <i class="fa fa-star fa-fw title-star"></i>
+                    {% endif %}
+                    
+                {% endfor %} 
+                ({{resource.raters}} reviews)
+            </td>
           </tr>
           {% endfor %}
       </table>
@@ -39,5 +53,5 @@
       {% endif %}
     </div>
     
-  </body>
-</html>
+  </div>
+{% endblock %}

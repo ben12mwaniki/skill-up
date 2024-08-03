@@ -1,21 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
+{% load mongofilters %}
+
+{% block content %}
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>resource-info</title>
-    {% load static %}
-    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
     <link href="{% static 'resource.css' %}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
 </head>
-<body>
-    <button class="toggle-button" onclick="toggleMode()">Toggle Dark/Light Mode</button>
+<div>
     
     <div class="content" >
         <div class="d-flex header-container justify-content-center">
-            <h3>{{resource.title}} stars: {{resource.star_rating}} </h3> 
+            <h3>{{resource.title}}
+                {% for i in range %}
+                    {% if i <= resource.star_rating|round %}
+                      <i class="fa fa-star fa-fw highlight-stars "></i> 
+                    {% else %}
+                       <i class="fa fa-star  fa-fw title-star"></i>
+                    {% endif %}
+                {% endfor %}
+
+                
+            </h3> 
+            <p>({{resource.raters}} reviews)</p>
         </div>
-        <!--★★★✰✰(23) To be used for stars   -->
+
         <div class="resource">
             <div>
                 <b>Type: </b> {{resource.type}}
@@ -41,43 +52,75 @@
                 <button class="btn-submit" onclick="saveResource()" >Save</button>
                 
                 {% if user.is_authenticated %}
+                    <div> 
+                        <input id="star_rating" name="star_rating" type="hidden" />
+                        <ul>
+                            <li><i class="fa fa-star fa-fw str"></i></li>
+                            <li><i class="fa fa-star fa-fw str"></i></li>
+                            <li><i class="fa fa-star fa-fw str"></i></li>
+                            <li><i class="fa fa-star fa-fw str"></i></li>
+                            <li><i class="fa fa-star fa-fw str"></i></li>
+                        </ul>
+                    <div id="msg" name="msg"></div>
+                    </div>
+
                     <button class="btn-submit" onclick="rateResource()">Rate</button>
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
                 {% endif %} 
             </div>
     
         </div>
         
 
-            <div class="comment">
+            <div class="comments-container">
                 <h4>Comments</h4>
+                
+                {% for comment in resource.comments %}
+                <div class="comment">
+                    
+                    {% for key, value in comment.items %}
+                        
+                    <div class="comment-header">
+                        <div class="flex">
+                            {% if key == "author" %} {{value}} {% endif %}
+                            <em>{% if key == "date" %}({{value}}){% endif %}</em>  
+                        </div>  
+                    </div>
+                    <div class="comment-body">
+                        {% if key == "text" %} {{value}} {% endif %}
+                    </div> 
 
-                <div class="comment-header">
-                    <div> John Doe <em> (2 days ago)</em> </div>
-                   
+                    {% endfor %}
                 </div>
-                <div class="comment-body">
-                    This is a great resource! I learned a lot from it.
-                </div> 
+                {% endfor %}
+                
                 
                 <h6>
-                    <label for="comment">Add comment:</label>
+                    <label for="comment_text">Add comment:</label>
                 </h6>
-                <textarea name="comment" cols="60" rows="5"> </textarea>
-                <button class="btn-submit">Submit</button>
+                <textarea id="comment_text" name="comment_text" placeholder="Your comment here" cols="60" rows="5" required></textarea>
+                <button class="btn-submit" onclick="addComment()">Submit</button>
+
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 
             </div>     
            
     </div>
 
     <script>
-        function toggleMode() {
-            document.body.classList.toggle('dark-mode');
-
-            // Toggle button and resource elements between light and dark mode
-            const btnSubmit = document.querySelector('.btn-submit');
-            btnSubmit.classList.toggle('light-mode');
-            btnSubmit.classList.toggle('dark-mode');
-        }
         function saveResource() {
             fetch(window.location.href, {
                 method: 'POST',
@@ -93,20 +136,113 @@
                     window.location.href = '/profile';
                 } else if (response.status === 401) {
                     window.location.href = '/login/?next=' + window.location.pathname;
+                } else if (response.status === 403) {
+                    alert('You created this resource!');
                 } else{
                     alert('Resource not saved'); 
                 }
             });
         }
         function rateResource() {
-            console.log('Resource rated');
-            console.log(window.location.href);
-            // Rate resource
+            // Check if rating is selected
+            if (!$('#star_rating').val()) {
+                alert('Please select a star rating!');
+                return;
+            }
+
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'   
+                },
+                body: JSON.stringify({
+                    'action': 'rate',
+                    'rating': $('#star_rating').val()
+                })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else if (response.status === 401) {
+                    window.location.href = '/login/?next=' + window.location.pathname;
+                } else if (response.status === 403) {
+                    alert('You cannot rate your own resource!');
+                } else {
+                    alert('Resource not rated'); 
+                }
+            });
+
         }
         function addComment() {
-            console.log('Comment added');
-            // Add comment
+            if ($('#comment_text').val()==='' || $('#comment_text').val().trim() === '') {
+                alert('Please enter a comment!');
+                return;
+            }
+            
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'   
+                },
+                body: JSON.stringify({
+                    'action': 'comment',
+                    'comment_text': $('#comment_text').val()
+                })
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else if (response.status === 401) {
+                    window.location.href = '/login/?next=' + window.location.pathname;
+                } else{
+                     alert('Comment not added'); 
+                }
+            });
+            
         }
+
+
+        // Set star rating
+        $(document).ready(function(){
+        $('.str').mouseover(function(){
+            obj = $(this);
+            $('.str').removeClass('highlight-stars');
+            $('.str').each(function(index){
+                $(this).addClass('highlight-stars');
+                if(index == $('.str').index(obj)){
+                    return false;
+                }
+            });
+        });
+    
+        $('.str').mouseleave(function(){
+            $('.str').removeClass('highlight-stars');
+        });
+    
+        $('.str').click(function(){
+            obj = $(this);
+            $('.str').each(function(index){
+                $(this).addClass('highlight-stars');
+                $('#star_rating').val((index+1));
+                $('#msg').html('I want to rate this ' + (index+1) + ' star(s).');
+                if(index == $('.str').index(obj)){
+                    return false;
+                }
+            });
+        });
+    
+        $('ul').mouseleave(function(){
+            if($('#star_rating').val()){
+                $('.str').each(function(index){
+                    $(this).addClass('highlight-stars');
+                    if((index+1) == $('#star_rating').val()){
+                        return false;
+                    }
+                });
+            }
+        });
+    });
+
     </script>
-</body>
-</html>
+</div>
+{% endblock %}

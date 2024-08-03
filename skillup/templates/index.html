@@ -1,23 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
 <head>
-  {% load static %}
-  <meta charset="UTF-8">
-  <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-  <title>skillUp</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="{% static 'index.css' %}">
+  <title>skillUp</title>
 </head>
 
-<body>
-  <a  href="/login" class="topcorner btn btn-primary" role="button"> Login</a>
+<div>
   
   <form class="container" action="/search-results" method="post">
     {% csrf_token %}
     <div class="row height d-flex justify-content-center align-items-center">
-      <div>
+      <div class="selectdropdown col-md-1">
         <select name="type">
-          <option value="" placeholder="">Category</option>
+          <option value="">Category</option>
           <option value="video">Video</option>
           <option value="blog">Blog</option>
           <option value="book">Book</option>
@@ -27,23 +26,33 @@
           <option value="forum">Forum</option>
         </select>
       </div>
-
       <div class="col-md-8">
-        <h1 class="centered" style="color:#070404;" >skillUp</h1>
+
+        <h1 class="centered" >skillUp</h1>
         <div class="search">
           <i class="fa fa-search"></i>
-          <input type="text" name="search_text" class="form-control" placeholder="🔍Want to learn? Search with keywords">
+          <input type="text" name="search_text" class="form-control" placeholder="Want to learn? Search with keywords">
           <button class="btn btn-primary" type="submit">Search</button>
         </div>
-        <div style="color:#000000;">
-          Hint: use <em>-keyword</em> to exclude keyword from results e.g. <em>programming -java</em>
+        <div >
+          {% if messages %}
+            <div class="alert alert-info" role="alert">
+              {% for message in messages %}
+                    {{ message }}
+              {% endfor %}
+            </div>                            
+          {% endif %}
+          <div style="color: blue;">
+            Hint: use <em>-keyword</em> to exclude keyword from results e.g. <em>programming -java</em>
+          </div>
+
         </div>
       </div>
+    </div>
       
-    </form>
+  </form>
+
 </div>
-</body>
+  
 
-</html>
-
-
+{% endblock %}

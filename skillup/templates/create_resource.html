@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta charset="UTF-8">
-  <title>Resource Form</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'create_resource.css' %}">
-  
+{% extends 'base.html' %}
+{% load static %}
 
+{% block content %}
+
+<head>
+  <title>Resource Form</title>
+  <link rel="stylesheet" href="{% static 'create_resource.css' %}">
 </head>
-<body>
-  <h2>Create a Resource</h2>
+
+<section>
+  <h2 class="justify-content-center">Create a Resource</h2>
   <div class="container">
     <div class="cta-form">
     </div>
@@ -43,15 +42,16 @@
         <option value="" disabled selected>Select related subject(s)</option>
         <option value="Frontend">Frontend</option>
         <option value="Backend">Backend</option>
-        <option value="Full_Stack">Full Stack</option>
+        <option value="Full Stack">Full Stack</option>
         <option value="Web3">Web3</option>
-        <option value="AI_ML">AI/ML</option>
-        <option value="Data_Science">Data Science</option>
+        <option value="AI/ML">AI/ML</option>
+        <option value="Data Science">Data Science</option>
         <option value="Cybersecurity">Cybersecurity</option>
         <option value="Cloud">Cloud</option>
-        <option value="Game_Dev">Game Development</option>
-        <option value="Mobile_Dev">Mobile Development</option>
+        <option value="Game Dev">Game Development</option>
+        <option value="Mobile Dev">Mobile Development</option>
         <option value="DevOps">DevOps</option>
+        <option value="Blockchain">Blockchain</option>
       </select>
 
       {% if error %}
@@ -63,6 +63,7 @@
       
     </form>
   </div>
-  </body>
-</html>
+</section>
+  
+  {% endblock %}
 

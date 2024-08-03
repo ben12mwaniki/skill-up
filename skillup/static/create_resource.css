@@ -1,18 +1,6 @@
-body {
-  margin: 0; /* Remove default margin */
-  padding: 0; /* Remove default padding */
-  background-color: #EDEEE9;
-  color: #303030;
-  font-family: "Inter", sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; /* Center content horizontally */
-  min-height: 100vh; /* Ensure full viewport height */
-}
 
-h1 {
-  font-size: clamp(1rem, 6vw, 10rem);
+
+h2 {
   margin: 5vh 0 2rem; /* Adjust margin for spacing */
   text-align: center; /* Center text */
 }

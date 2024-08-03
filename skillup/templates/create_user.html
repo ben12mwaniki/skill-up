@@ -1,43 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta charset="UTF-8">
   <title>new user</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'create_resource.css' %}">
-
-
+  <link rel="stylesheet" href="{% static 'login.css' %}">
 </head>
 
-<body>
-  <h2>Sign Up</h2>
+<div>
+  
+  
   <div class="container">
-    <div class="cta-form">
-      <h3>Please fill out the form </h3>
+    
+    <div class="d-flex justify-content-center header-container">
+      <h3>Please fill out the form</h3>
     </div>
-    <form action="/create_user" method="post" class="form">
-      {% csrf_token %}
 
-      <label for="user_name" class="form__label">Username</label>
-      <input type="text" class="form__input" name="user_name" required />
+    <div class="d-flex justify-content-center pt-5 mt-5 pb-5 form-container"> 
+    
+      <form action="/create_user" method="post" class="form">
+        {% csrf_token %}
+  
+        <label for="user_name" class="form__label">Username</label>
+        <input type="text" class="form-control" name="user_name" required />
+  
+        <label for="email" class="form__label">Email</label>
+        <input type="email" class="form-control" name="email" required />
+  
+        <label for="password" class="form__label">Password</label>
+        <input type="password" class="form-control" name="password" required />
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+          {{ error }} 
+        </div>
+        {% endif %}
+  
+        <button type="submit" class="submit-button">Submit</button>
+  
+      </form>
+    </div>
 
-      <label for="email" class="form__label">Email</label>
-      <input type="email" class="form__input" name="email" required />
-
-      <label for="password" class="form__label">Password</label>
-      <input type="password" class="form__input" name="password" required />
-      {% if error %}
-      <div class="alert alert-danger" role="alert">
-        {{ error }} 
-      </div>
-      {% endif %}
-
-      <button type="submit" class="submit-button">Submit</button>
-
-    </form>
+    
   </div>
-</body>
+</div>
 
-</html>
+{% endblock %}
