@@ -19,10 +19,18 @@ load_dotenv()
 # Connect to MongoDB
 client = pymongo.MongoClient(os.getenv('MONGO_URI'))
 
-
+# Render the home page
 def index(request):
     return render(request, 'index.html')
 
+'''
+    Allow users to create an account
+    Ensure username is unique
+    Create a profile for the user
+    Redirect to login page after successful account creation
+    Parameters: user_name, email, password
+
+'''
 def create_user(request):
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
@@ -48,7 +56,13 @@ def create_user(request):
 
     if request.method == 'GET':
         return render(request, 'create_user.html')
+    
 
+'''
+    Allow users to create a resource
+    Parameters: title, type, link, subjects, description
+    Redirect to profile page after successful resource creation
+'''
 @login_required
 def create_resource(request):
     if request.method == 'POST':
@@ -89,7 +103,13 @@ def create_resource(request):
     if request.method == 'GET':
         return render(request, 'create_resource.html')
     
-    
+'''
+    Allow users to login
+    Query parameters: next - redirect to the page after login
+    Next page is the page the user was trying to access before being redirected to login
+    If no next page, redirect to profile page
+    Parameters: user_name, password
+'''    
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('user_name')
@@ -112,6 +132,13 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+'''
+    Render the profile page
+    Display saved resources
+    Display created resources
+    Modify user's about section
+
+'''
 @login_required
 def profile(request):
     if request.method == 'GET':
@@ -132,6 +159,16 @@ def profile(request):
     if request.method == 'POST':
         pass
 
+'''
+    Allow users to search for resources
+    Parameters: search_text, type
+    If search_text is empty, return all resources of the specified type
+    If type is empty, return all resources matching the search_text
+    If both are specified, return resources matching both criteria
+    If both are empty, no resources are returned
+    Search based on text index created on description, subjects and title
+    Display search results in results page
+'''
 def search(request):
     if request.method == 'POST':
         search_text = request.POST.get('search_text')
@@ -150,7 +187,8 @@ def search(request):
         if len(resources) == 0:
             messages.info(request, 'No resources matching criteria!')
             return redirect(request.META['HTTP_REFERER'])  
-          
+
+        # range is used to display stars in the results page  
         return render(request, 'results.html', {'resources':resources, 'range': range(1,6)})
 
     if request.method == 'GET':
@@ -158,7 +196,7 @@ def search(request):
 
 
 """
-    Get a single resource by id
+    Get a single resource by its id
     Allow users to save resource
     Allow users to rate resource
     Allow users to comment on resource
@@ -296,7 +334,10 @@ def get_resource(request, id):
             else:
                 return HttpResponse('Unauthorized', status=401)
     
-    
+'''
+    Print all resources in the database
+    Mainly for debugging purposes
+'''    
 def get_resources(request):
     dbname = client['skillupdb']
     collection = dbname['resources']
@@ -306,13 +347,13 @@ def get_resources(request):
         print(resource)     
     return HttpResponse("<h1>Resources fetched successfully!</h1>")
 
-# Text index for search based on description and subjects
+# Text index for search based on description, subjects and title
 def create_text_index():
     dbname = client['skillupdb']
     collection = dbname['resources']
     collection.create_index([('description', 'text'), ('subjects', 'text'), ('title', 'text')]) 
     
-
+# Create text index if it does not exist
 create_text_index()
 
 
