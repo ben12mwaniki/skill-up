@@ -18,7 +18,7 @@
 
       <label for="title" class="form__label">Title</label>
       <input type="text" placeholder="Cloud computing with Azure" class="form__input" name="title" required />
-     
+
       <label for="type" class="form__label">Resource type</label>
       <select class="form__input" name="type" required>
         <option value="" disabled selected>Select one</option>
@@ -30,12 +30,13 @@
         <option value="course">Course</option>
         <option value="forum">Forum</option>
       </select>
-     
+
       <label for="link" class="form__label">Link</label>
       <input type="link" placeholder="https://123.com" class="form__input" name="link" required />
 
       <label for="description" class="form__label">Description</label>
-      <textarea placeholder="Course for beginners to advance quickly in backend development. Author is ex-meta engineer" name="description" cols="60" rows="7"></textarea>
+      <textarea placeholder="Course for beginners to advance quickly in backend development. Author is ex-meta engineer"
+        name="description" cols="60" rows="7"></textarea>
 
       <label for="subjects" class="form__label">Subject</label>
       <select id="subjects" name="subjects" size="8" multiple required>
@@ -58,12 +59,11 @@
       <div class="alert alert-danger" role="alert">
         {{ error }}
       </div>
-      {% endif %} 
+      {% endif %}
       <button type="submit" class="submit-button">Submit</button>
-      
+
     </form>
   </div>
 </section>
-  
-  {% endblock %}
 
+{% endblock %}

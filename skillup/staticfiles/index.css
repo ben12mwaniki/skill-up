@@ -1,70 +1,71 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:weight@100;200;300;400;500;600;700;800&display=swap");
 
 
-       body{
-        background-color:#eee;
-        font-family: "Poppins", sans-serif;
-        font-weight: 300;
-       }
+body {
+       background-color: #eee;
+       font-family: "Poppins", sans-serif;
+       font-weight: 300;
+}
 
-       .centered{
-              margin: auto;
-              width: 50%;
-       }
+.centered {
+       margin: auto;
+       width: 50%;
+}
 
-       .height{
-        height: 90vh;
-       }
-       
-       .selectdropdown{
-              position: relative;
-       }
+.height {
+       height: 90vh;
+}
 
-       .search{
+.selectdropdown {
+       position: relative;
+}
+
+.search {
        position: relative;
        padding-left: 10px;
-         
-       }
-       .msg{
-              position: relative;
-              padding-left: 10px;
-              margin-top: 10px;
-       }
-       
 
-       .search input{
+}
 
-        height: 60px;
-        text-indent: 25px;
-        border: 2px solid #d6d4d4;
+.msg {
+       position: relative;
+       padding-left: 10px;
+       margin-top: 10px;
+}
 
 
-       }
+.search input {
+
+       height: 60px;
+       text-indent: 25px;
+       border: 2px solid #d6d4d4;
 
 
-       .search input:focus{
-
-        box-shadow: none;
-        border: 2px solid blue;
+}
 
 
-       }
+.search input:focus {
 
-       .search .fa-search{
+       box-shadow: none;
+       border: 2px solid blue;
 
-        position: absolute;
-        top: 20px;
-        left: 16px;
 
-       }
+}
 
-       .search button{
+.search .fa-search {
 
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        height: 50px;
-        width: 110px;
-        background: blue;
+       position: absolute;
+       top: 20px;
+       left: 16px;
 
-       }
+}
+
+.search button {
+
+       position: absolute;
+       top: 5px;
+       right: 5px;
+       height: 50px;
+       width: 110px;
+       background: blue;
+
+}

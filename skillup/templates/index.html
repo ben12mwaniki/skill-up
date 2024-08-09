@@ -10,7 +10,7 @@
 </head>
 
 <div>
-  
+
   <form class="container" action="/search-results" method="post">
     {% csrf_token %}
     <div class="row height d-flex justify-content-center align-items-center">
@@ -28,7 +28,7 @@
       </div>
       <div class="col-md-8">
 
-        <h1 class="centered" >skillUp</h1>
+        <h1 class="centered">skillUp</h1>
         <div class="search">
           <i class="fa fa-search"></i>
           <input type="text" name="search_text" class="form-control" placeholder="Want to learn? Search with keywords">
@@ -36,11 +36,11 @@
         </div>
         <div class="msg">
           {% if messages %}
-            <div class="alert alert-info" role="alert">
-              {% for message in messages %}
-                    {{ message }}
-              {% endfor %}
-            </div>                            
+          <div class="alert alert-info" role="alert">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+          </div>
           {% endif %}
           <div style="color: blue;">
             Hint: use <em>-keyword</em> to exclude keyword from results e.g. <em>programming -java</em>
@@ -49,10 +49,10 @@
         </div>
       </div>
     </div>
-      
+
   </form>
 
 </div>
-  
+
 
 {% endblock %}

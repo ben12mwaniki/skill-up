@@ -2,73 +2,65 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-        <link rel="stylesheet" href="{% static 'base.css' %}">
-      
-    </head>
-    
-    <body>  
-        <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
-            <div class="container-fluid">
-                <button class="toggle-button" onclick="toggleMode()"><i class="fa-solid fa-moon"></i></button>
-              <ul class="navbar-nav ms-auto">
-                <!-- Dropdown -->
-                <li class="nav-item dropdown">
-                  <a
-                    data-mdb-dropdown-init
-                    class="nav-link"
-                    href="#"
-                    id="navbarDropdownMenuLink"
-                    role="button"
-                    aria-expanded="false"
-                    >
-                    <i class="fas fa-bars"></i>
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <li>
-                        <a class="dropdown-item" href="/">Search</a>
-                    </li>
-                    {% if user.is_authenticated %}
-                    <li>
-                      <a class="dropdown-item" href="/profile">{{user.username}} </a>
-                      <a class="dropdown-item" href="/logout">Logout</a>
-                    </li>
-                    {% else %}
-                    <li>
-                      <a class="dropdown-item" href="/login">Login</a>
-                    </li>
-                    {% endif %}
-                    </ul>        
-                </li>
-              </ul>
-            </div>
-        </nav>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'base.css' %}">
 
-        {% block content %} 
-        {% endblock %}
+</head>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js">
-          import { Dropdown, initMDB } from "mdb-ui-kit";
-          initMDB({ Dropdown });
-        </script>
-        <script>
-            //Toggle button and resource elements between light and dark mode
-           function toggleMode() {
-              document.body.classList.toggle('dark-mode');
-              const btnSubmit = document.querySelector('.btn-submit');
-              btnSubmit.classList.toggle('light-mode');
-              btnSubmit.classList.toggle('dark-mode');
-          }
-        </script>
-        
-    </body>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+    <div class="container-fluid">
+      <button class="toggle-button" onclick="toggleMode()"><i class="fa-solid fa-moon"></i></button>
+      <ul class="navbar-nav ms-auto">
+        <!-- Dropdown -->
+        <li class="nav-item dropdown">
+          <a data-mdb-dropdown-init class="nav-link" href="#" id="navbarDropdownMenuLink" role="button"
+            aria-expanded="false">
+            <i class="fas fa-bars"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li>
+              <a class="dropdown-item" href="/">Search</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li>
+              <a class="dropdown-item" href="/profile">{{user.username}} </a>
+              <a class="dropdown-item" href="/logout">Logout</a>
+            </li>
+            {% else %}
+            <li>
+              <a class="dropdown-item" href="/login">Login</a>
+            </li>
+            {% endif %}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.3.2/mdb.umd.min.js">
+    import { Dropdown, initMDB } from "mdb-ui-kit";
+    initMDB({ Dropdown });
+  </script>
+  <script>
+    //Toggle button and resource elements between light and dark mode
+    function toggleMode() {
+      document.body.classList.toggle('dark-mode');
+      const btnSubmit = document.querySelector('.btn-submit');
+      btnSubmit.classList.toggle('light-mode');
+      btnSubmit.classList.toggle('dark-mode');
+    }
+  </script>
+
+</body>
 
 </html>
-
-

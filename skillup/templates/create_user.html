@@ -10,39 +10,39 @@
 </head>
 
 <div>
-  
-  
+
+
   <div class="container">
-    
+
     <div class="d-flex justify-content-center header-container">
       <h3>Please fill out the form</h3>
     </div>
 
-    <div class="d-flex justify-content-center pt-5 mt-5 pb-5 form-container"> 
-    
+    <div class="d-flex justify-content-center pt-5 mt-5 pb-5 form-container">
+
       <form action="/create_user" method="post" class="form">
         {% csrf_token %}
-  
+
         <label for="user_name" class="form__label">Username</label>
         <input type="text" class="form-control" name="user_name" required />
-  
+
         <label for="email" class="form__label">Email</label>
         <input type="email" class="form-control" name="email" required />
-  
+
         <label for="password" class="form__label">Password</label>
         <input type="password" class="form-control" name="password" required />
         {% if error %}
         <div class="alert alert-danger" role="alert">
-          {{ error }} 
+          {{ error }}
         </div>
         {% endif %}
-  
+
         <button type="submit" class="submit-button">Submit</button>
-  
+
       </form>
     </div>
 
-    
+
   </div>
 </div>
 
