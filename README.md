@@ -21,8 +21,8 @@ _Important: Always a good idea to work in a virtual environment to not mess up w
 
   | OS | How |
   | ---- | ----------- |
-  | Windows | .venv\Scripts\activate |
-  | Linux/Mac    |source .venv/bin/activate |
+  | Windows | `.venv\Scripts\activate` |
+  | Linux/Mac    | `source .venv/bin/activate` |
 
   </div>
 
