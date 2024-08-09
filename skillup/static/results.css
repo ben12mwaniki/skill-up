@@ -2,13 +2,14 @@
   color: #F4B30A;
   display: inline-block;
   text-shadow: 0 0 1px #F4B30A;
-  }
+}
 
 .title-star {
   color: #F0F0F0;
   display: inline-block;
   text-shadow: 0 0 1px #666666;
 }
+
 .table {
   padding: auto;
 }
