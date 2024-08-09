@@ -1,8 +1,8 @@
-
-
 h2 {
-  margin: 5vh 0 2rem; /* Adjust margin for spacing */
-  text-align: center; /* Center text */
+  /* Adjust margin for spacing */
+  margin: 5vh 0 2rem;
+  /* Center text */
+  text-align: center;
 }
 
 .container {
@@ -17,10 +17,12 @@ h2 {
 }
 
 .form {
-  width: 100%; /* Full width */
+  /* Full width */
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center form elements */
+  /* Center form elements */
+  align-items: center;
 }
 
 .form__input {
@@ -49,6 +51,7 @@ h2 {
 }
 
 /* Remove horizontal scroll */
-html, body {
+html,
+body {
   overflow-x: hidden;
 }

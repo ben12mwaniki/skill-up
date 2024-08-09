@@ -16,7 +16,8 @@ body {
 }
 
 .dark-mode .form-control::placeholder {
-    color: #bbbbbb; /* Light gray placeholder text */
+    /* Light gray placeholder text */
+    color: #bbbbbb;
 }
 
 .dark-mode .btn,
@@ -46,7 +47,8 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    margin-top: 10px; /* Added margin-top for spacing */
+    /* Added margin-top for spacing */
+    margin-top: 10px;
 }
 
 .form-control,

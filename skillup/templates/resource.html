@@ -3,27 +3,27 @@
 {% load mongofilters %}
 
 {% block content %}
+
 <head>
     <title>resource-info</title>
     <link href="{% static 'resource.css' %}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    
+
 </head>
 <div>
-    
-    <div class="content" >
+
+    <div class="content">
         <div class="d-flex header-container justify-content-center">
             <h3>{{resource.title}}
                 {% for i in range %}
-                    {% if i <= resource.star_rating|round %}
-                      <i class="fa fa-star fa-fw highlight-stars "></i> 
+                {% if i <= resource.star_rating|round %} <i class="fa fa-star fa-fw highlight-stars "></i>
                     {% else %}
-                       <i class="fa fa-star  fa-fw title-star"></i>
+                    <i class="fa fa-star  fa-fw title-star"></i>
                     {% endif %}
-                {% endfor %}
+                    {% endfor %}
 
-                
-            </h3> 
+
+            </h3>
             <p>({{resource.raters}} reviews)</p>
         </div>
 
@@ -31,93 +31,94 @@
             <div>
                 <b>Type: </b> {{resource.type}}
             </div>
-              <div>
-                 <b>Author:</b>  {{resource.author}}
-              </div>
-              <div>
-               <b>Link:</b>   <a href="{{resource.link}}" target="_blank" rel="noopener noreferrer" > visit</a> 
-              </div>
-              <div>
-                <b>Subjects:</b>   {{resource.subjects}}
-              </div>
-              <div>
+            <div>
+                <b>Author:</b> {{resource.author}}
+            </div>
+            <div>
+                <b>Link:</b> <a href="{{resource.link}}" target="_blank" rel="noopener noreferrer"> visit</a>
+            </div>
+            <div>
+                <b>Subjects:</b> {{resource.subjects}}
+            </div>
+            <div>
                 <b>Description:</b>
                 <div>
                     {{resource.description}}
                 </div>
-                 
-              </div>
 
-              <div class="d-flex justify-content-between">  
-                <button class="btn-submit" onclick="saveResource()" >Save</button>
-                
-                {% if user.is_authenticated %}
-                    <div> 
-                        <input id="star_rating" name="star_rating" type="hidden" />
-                        <ul>
-                            <li><i class="fa fa-star fa-fw str"></i></li>
-                            <li><i class="fa fa-star fa-fw str"></i></li>
-                            <li><i class="fa fa-star fa-fw str"></i></li>
-                            <li><i class="fa fa-star fa-fw str"></i></li>
-                            <li><i class="fa fa-star fa-fw str"></i></li>
-                        </ul>
-                    <div id="msg" name="msg"></div>
-                    </div>
-
-                    <button class="btn-submit" onclick="rateResource()">Rate</button>
-                    {% if messages %}
-                        <ul>
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-
-                {% endif %} 
             </div>
-    
-        </div>
-        
 
-            <div class="comments-container">
-                <h4>Comments</h4>
-                
-                {% for comment in resource.comments %}
-                <div class="comment">
-                    
-                    {% for key, value in comment.items %}
-                        
-                    <div class="comment-header">
-                        <div class="flex">
-                            {% if key == "author" %} {{value}} {% endif %}
-                            <em>{% if key == "date" %}({{value}}){% endif %}</em>  
-                        </div>  
-                    </div>
-                    <div class="comment-body">
-                        {% if key == "text" %} {{value}} {% endif %}
-                    </div> 
+            <div class="d-flex justify-content-between">
+                <button class="btn-submit" onclick="saveResource()">Save</button>
 
-                    {% endfor %}
-                </div>
-                {% endfor %}
-                
-                
-                <h5>
-                    <label for="comment_text">Add comment:</label>
-                </h5>
-                <textarea id="comment_text" name="comment_text" placeholder="Your comment here" cols="60" rows="5" required></textarea>
-                <button class="btn-submit" onclick="addComment()">Submit</button>
-
-                {% if messages %}
+                {% if user.is_authenticated %}
+                <div>
+                    <input id="star_rating" name="star_rating" type="hidden" />
                     <ul>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
+                        <li><i class="fa fa-star fa-fw str"></i></li>
+                        <li><i class="fa fa-star fa-fw str"></i></li>
+                        <li><i class="fa fa-star fa-fw str"></i></li>
+                        <li><i class="fa fa-star fa-fw str"></i></li>
+                        <li><i class="fa fa-star fa-fw str"></i></li>
                     </ul>
+                    <div id="msg" name="msg"></div>
+                </div>
+
+                <button class="btn-submit" onclick="rateResource()">Rate</button>
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
                 {% endif %}
-                
-            </div>     
-           
+
+                {% endif %}
+            </div>
+
+        </div>
+
+
+        <div class="comments-container">
+            <h4>Comments</h4>
+
+            {% for comment in resource.comments %}
+            <div class="comment">
+
+                {% for key, value in comment.items %}
+
+                <div class="comment-header">
+                    <div class="flex">
+                        {% if key == "author" %} {{value}} {% endif %}
+                        <em>{% if key == "date" %}({{value}}){% endif %}</em>
+                    </div>
+                </div>
+                <div class="comment-body">
+                    {% if key == "text" %} {{value}} {% endif %}
+                </div>
+
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+
+            <h5>
+                <label for="comment_text">Add comment:</label>
+            </h5>
+            <textarea id="comment_text" name="comment_text" placeholder="Your comment here" cols="60" rows="5"
+                required></textarea>
+            <button class="btn-submit" onclick="addComment()">Submit</button>
+
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+        </div>
+
     </div>
 
     <script>
@@ -126,7 +127,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'   
+                    'X-CSRFToken': '{{ csrf_token }}'
                 },
                 body: JSON.stringify({
                     'action': 'save'
@@ -138,8 +139,8 @@
                     window.location.href = '/login/?next=' + window.location.pathname;
                 } else if (response.status === 403) {
                     alert('You created this resource!');
-                } else{
-                    alert('Resource not saved'); 
+                } else {
+                    alert('Resource not saved');
                 }
             });
         }
@@ -154,7 +155,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'   
+                    'X-CSRFToken': '{{ csrf_token }}'
                 },
                 body: JSON.stringify({
                     'action': 'rate',
@@ -168,22 +169,22 @@
                 } else if (response.status === 403) {
                     alert('You cannot rate your own resource!');
                 } else {
-                    alert('Resource not rated'); 
+                    alert('Resource not rated');
                 }
             });
 
         }
         function addComment() {
-            if ($('#comment_text').val()==='' || $('#comment_text').val().trim() === '') {
+            if ($('#comment_text').val() === '' || $('#comment_text').val().trim() === '') {
                 alert('Please enter a comment!');
                 return;
             }
-            
+
             fetch(window.location.href, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'   
+                    'X-CSRFToken': '{{ csrf_token }}'
                 },
                 body: JSON.stringify({
                     'action': 'comment',
@@ -194,54 +195,54 @@
                     window.location.reload();
                 } else if (response.status === 401) {
                     window.location.href = '/login/?next=' + window.location.pathname;
-                } else{
-                     alert('Comment not added'); 
+                } else {
+                    alert('Comment not added');
                 }
             });
-            
+
         }
 
 
         // Set star rating
-        $(document).ready(function(){
-        $('.str').mouseover(function(){
-            obj = $(this);
-            $('.str').removeClass('highlight-stars');
-            $('.str').each(function(index){
-                $(this).addClass('highlight-stars');
-                if(index == $('.str').index(obj)){
-                    return false;
-                }
-            });
-        });
-    
-        $('.str').mouseleave(function(){
-            $('.str').removeClass('highlight-stars');
-        });
-    
-        $('.str').click(function(){
-            obj = $(this);
-            $('.str').each(function(index){
-                $(this).addClass('highlight-stars');
-                $('#star_rating').val((index+1));
-                $('#msg').html('I want to rate this ' + (index+1) + ' star(s).');
-                if(index == $('.str').index(obj)){
-                    return false;
-                }
-            });
-        });
-    
-        $('ul').mouseleave(function(){
-            if($('#star_rating').val()){
-                $('.str').each(function(index){
+        $(document).ready(function () {
+            $('.str').mouseover(function () {
+                obj = $(this);
+                $('.str').removeClass('highlight-stars');
+                $('.str').each(function (index) {
                     $(this).addClass('highlight-stars');
-                    if((index+1) == $('#star_rating').val()){
+                    if (index == $('.str').index(obj)) {
                         return false;
                     }
                 });
-            }
+            });
+
+            $('.str').mouseleave(function () {
+                $('.str').removeClass('highlight-stars');
+            });
+
+            $('.str').click(function () {
+                obj = $(this);
+                $('.str').each(function (index) {
+                    $(this).addClass('highlight-stars');
+                    $('#star_rating').val((index + 1));
+                    $('#msg').html('I want to rate this ' + (index + 1) + ' star(s).');
+                    if (index == $('.str').index(obj)) {
+                        return false;
+                    }
+                });
+            });
+
+            $('ul').mouseleave(function () {
+                if ($('#star_rating').val()) {
+                    $('.str').each(function (index) {
+                        $(this).addClass('highlight-stars');
+                        if ((index + 1) == $('#star_rating').val()) {
+                            return false;
+                        }
+                    });
+                }
+            });
         });
-    });
 
     </script>
 </div>

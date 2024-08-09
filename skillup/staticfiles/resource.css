@@ -5,11 +5,11 @@ body {
 }
 
 .content {
-   padding-left: 250px;
-   padding-right: 250px;
+    padding-left: 250px;
+    padding-right: 250px;
 }
 
-.content .resource{
+.content .resource {
     background-color: #f8f8f8;
     border: 1px solid #e0e0e0;
     padding: 30px;
@@ -17,19 +17,20 @@ body {
     padding-right: 30px;
     border-radius: 10px;
 }
+
 .content .comments-container {
     padding: 30px;
-    
-    .comment{
+
+    .comment {
         padding: 10px;
-        
+
     }
 
     .comment-header {
 
         color: blue;
     }
-   
+
 
 }
 
@@ -40,7 +41,8 @@ body {
     background-color: #555555;
     color: #ffffff;
 }
-.dark-mode .content .resource{
+
+.dark-mode .content .resource {
     background-color: #111111;
     border: 1px solid #444444;
 }
@@ -49,11 +51,12 @@ body {
 .header-container {
     margin-top: 50px;
 }
+
 .highlight-stars {
     color: #F4B30A;
     display: inline-block;
     text-shadow: 0 0 1px #F4B30A;
-    }
+}
 
 .title-star {
     color: #F0F0F0;
@@ -110,4 +113,3 @@ li {
     font-style: italic;
     text-align: center;
 }
-

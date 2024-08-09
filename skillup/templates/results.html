@@ -4,54 +4,53 @@
 
 {% block content %}
 
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" /> 
-    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
-    <link href="{% static 'results.css' %}" rel="stylesheet" />
-    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <title>skillUp Search Results</title>
-  </head>
-  <div>
-    <div class="container">
-      {% if resources|length > 0 %}
-      <table class="table table-striped">
-          
-          <tr>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Link</th>
-            <th>Subject</th>
-            <th>Rating</th>
-          </tr>
-          {% for resource in resources %}
-         
-          <tr>
-            <td> <a href="resource/{{ resource|mongo_id}}">{{ resource.title }} </a></td>
-            <td>{{ resource.type }}</td>
-            <td><a href="{{ resource.link }}">visit</a></td>
-            <td>{{ resource.subjects }}</td>
-            <td>
-              {% for i in range %}
-                    {% if i <= resource.star_rating|round %}
-                      <i class="fa fa-star fa-fw highlight-stars"></i> 
-                    {% else %}
-                       <i class="fa fa-star fa-fw title-star"></i>
-                    {% endif %}
-                    
-                {% endfor %} 
-                ({{resource.raters}} reviews)
-            </td>
-          </tr>
-          {% endfor %}
-      </table>
-      {% else %}
-          <h2> No resource matches criteria </h2> 
-      {% endif %}
-    </div>
-    
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+  <link href="{% static 'results.css' %}" rel="stylesheet" />
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <title>skillUp Search Results</title>
+</head>
+<div>
+  <div class="container">
+    {% if resources|length > 0 %}
+    <table class="table table-striped">
+
+      <tr>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Link</th>
+        <th>Subject</th>
+        <th>Rating</th>
+      </tr>
+      {% for resource in resources %}
+
+      <tr>
+        <td> <a href="resource/{{ resource|mongo_id}}">{{ resource.title }} </a></td>
+        <td>{{ resource.type }}</td>
+        <td><a href="{{ resource.link }}">visit</a></td>
+        <td>{{ resource.subjects }}</td>
+        <td>
+          {% for i in range %}
+          {% if i <= resource.star_rating|round %} <i class="fa fa-star fa-fw highlight-stars"></i>
+            {% else %}
+            <i class="fa fa-star fa-fw title-star"></i>
+            {% endif %}
+
+            {% endfor %}
+            ({{resource.raters}} reviews)
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <h2> No resource matches criteria </h2>
+    {% endif %}
   </div>
+
+</div>
 {% endblock %}
