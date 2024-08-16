@@ -21,7 +21,8 @@
                     <div class="about-text">
                         <h3>Welcome back {{user.get_username}}!</h3>
                         <h6>About me</h6>
-                        <p>{{user.profile.about}}</p>
+                        <p id="about-me-savedmode">{{user.profile.about}}</p>
+                        <textarea class="form-control" id="about-me-editmode" rows="3" style="display: none;">{{user.profile.about}}</textarea>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -90,15 +91,45 @@
         document.addEventListener("DOMContentLoaded", function () {
             const editProfileToggle = document.getElementById("edit-profile-toggle");
             const deleteButtons = document.querySelectorAll(".delete-button");
+            const aboutMeSavedMode = document.getElementById("about-me-savedmode");
+            const aboutMeEditMode = document.getElementById("about-me-editmode");
+            
             let isEditMode = false;
 
             editProfileToggle.addEventListener("click", function () {
+                //Save about me text area to user profile
+                if (isEditMode) {
+                    //Fetch only if text has changed
+                    if (aboutMeSavedMode.textContent !== aboutMeEditMode.value) {
+                        fetch("/profile", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({
+                            "about": aboutMeEditMode.value
+                        })
+                    }).then(response => {
+                        if (response.ok) {
+                            aboutMeSavedMode.textContent = aboutMeEditMode.value;
+                        } else {
+                            alert("Failed to save changes");
+                        }
+                    });
+
+                    }
+                   
+                }
+                
                 isEditMode = !isEditMode;
                 deleteButtons.forEach(button => {
                     button.disabled = !isEditMode;
                 });
 
-                // Optionally change the button text
+                // Toggle the display of the about me text area, saved text and edit button
+                aboutMeSavedMode.style.display = isEditMode ? "none" : "block";
+                aboutMeEditMode.style.display = isEditMode ? "block" : "none";
                 editProfileToggle.textContent = isEditMode ? "Save Changes" : "Edit Profile";
             });
         });

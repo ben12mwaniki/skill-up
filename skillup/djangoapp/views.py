@@ -157,8 +157,15 @@ def profile(request):
          
 
     if request.method == 'POST':
-        pass
-
+        data = json.loads(request.body)
+        if 'about' in data:
+            profile = request.user.profile
+            profile.about = data['about']
+            profile.save()
+            return HttpResponse('Success')
+        else:    
+            return HttpResponse('Error', status=400)
+        
 '''
     Allow users to search for resources
     Parameters: search_text, type
