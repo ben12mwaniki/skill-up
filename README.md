@@ -11,7 +11,7 @@ The web app can be found [here](https://skillup-1-a33a20b30d96.herokuapp.com/).
 
 ## Set-up and configuration
 * Fork repository
-* Create a virtual environment while in project root `py -m venv .venv`
+* Create a virtual environment while in project root `py -m venv .venv` or `python3 -m venv .venv`
 
 _Important: Always a good idea to work in a virtual environment to not mess up with other python installations or dependencies_
 
