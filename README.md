@@ -7,6 +7,7 @@ The web app can be found [here](https://skillup-1-a33a20b30d96.herokuapp.com/).
 ## Prerequisites
 * Python 3
 * pip
+* Postgres >=14
 * See [Configuring database](#configuring-database-and-environment-variables)
 
 ## Set-up and configuration

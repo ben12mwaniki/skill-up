@@ -1,1 +1,1 @@
-web: cd skillup; waitress-serve --port=$PORT skillup.wsgi:application
+web: cd skillup; gunicorn skillup.wsgi
