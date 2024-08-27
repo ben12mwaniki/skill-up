@@ -1,15 +1,14 @@
-from django.shortcuts import redirect, render
-from django.http import HttpResponse
 from bson.objectid import ObjectId
+from datetime import datetime
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib import messages
 from django.contrib.auth.models import User
-from djangoapp.models import Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from djangoapp.models import Profile
+from django.shortcuts import redirect
 from django.db.utils import IntegrityError
-from django.urls import reverse
-from django.conf import settings
-from authlib.integrations.django_client import OAuth
-from urllib.parse import quote_plus, urlencode
 import pymongo
 import os
 import json
@@ -19,11 +18,18 @@ load_dotenv()
 # Connect to MongoDB
 client = pymongo.MongoClient(os.getenv('MONGO_URI'))
 
-
-
+# Render the home page
 def index(request):
     return render(request, 'index.html')
 
+'''
+    Allow users to create an account
+    Ensure username is unique
+    Create a profile for the user
+    Redirect to login page after successful account creation
+    Parameters: user_name, email, password
+
+'''
 def create_user(request):
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
@@ -49,7 +55,13 @@ def create_user(request):
 
     if request.method == 'GET':
         return render(request, 'create_user.html')
+    
 
+'''
+    Allow users to create a resource
+    Parameters: title, type, link, subjects, description
+    Redirect to profile page after successful resource creation
+'''
 @login_required
 def create_resource(request):
     if request.method == 'POST':
@@ -69,7 +81,8 @@ def create_resource(request):
             "description": description,
             "stars_total": 0, 
             "star_rating": 0,
-            "raters":0,
+            "raters": 0,
+            "ratings":{},
             "comments": []
             
         }
@@ -89,7 +102,13 @@ def create_resource(request):
     if request.method == 'GET':
         return render(request, 'create_resource.html')
     
-    
+'''
+    Allow users to login
+    Query parameters: next - redirect to the page after login
+    Next page is the page the user was trying to access before being redirected to login
+    If no next page, redirect to profile page
+    Parameters: user_name, password
+'''    
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('user_name')
@@ -112,6 +131,13 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+'''
+    Render the profile page
+    Display saved resources
+    Display created resources
+    Modify user's about section
+
+'''
 @login_required
 def profile(request):
     if request.method == 'GET':
@@ -130,8 +156,25 @@ def profile(request):
          
 
     if request.method == 'POST':
-        pass
-
+        data = json.loads(request.body)
+        if 'about' in data:
+            profile = request.user.profile
+            profile.about = data['about']
+            profile.save()
+            return HttpResponse('Success')
+        else:    
+            return HttpResponse('Error', status=400)
+        
+'''
+    Allow users to search for resources
+    Parameters: search_text, type
+    If search_text is empty, return all resources of the specified type
+    If type is empty, return all resources matching the search_text
+    If both are specified, return resources matching both criteria
+    If both are empty, no resources are returned
+    Search based on text index created on description, subjects and title
+    Display search results in results page
+'''
 def search(request):
     if request.method == 'POST':
         search_text = request.POST.get('search_text')
@@ -145,27 +188,51 @@ def search(request):
             resources = collection.find({'type': type})
         else:
             resources = collection.find({'$text': {'$search': search_text}, 'type': type})
-          
-        return render(request, 'results.html', {'resources':list(resources)})
+
+        resources = list(resources)    
+        if len(resources) == 0:
+            messages.info(request, 'No resources matching criteria!')
+            return redirect(request.META['HTTP_REFERER'])  
+
+        # range is used to display stars in the results page  
+        return render(request, 'results.html', {'resources':resources, 'range': range(1,6)})
 
     if request.method == 'GET':
         return redirect('/')
 
+
+"""
+    Get a single resource by its id
+    Allow users to save resource
+    Allow users to rate resource
+    Allow users to comment on resource
+    Allow users to remove resource from saved
+    Allow author to delete resource
+"""
 def get_resource(request, id):
     if request.method == 'GET':
         dbname = client['skillupdb']
         collection = dbname['resources']
         try:
             resource = collection.find_one({'_id': ObjectId(id)})
-            return render(request, 'resource.html', {'resource': resource})  
+            return render(request, 'resource.html', {'resource': resource, 'range': range(1,6)})  
         except Exception as e:
             print(e)
             return HttpResponse("<h1>Resource not found! Try again later</h1>")
     
     if request.method == 'POST':
         data = json.loads(request.body)
+
         if data['action'] == 'save':
             if request.user.is_authenticated:
+                dbname = client['skillupdb']
+                collection = dbname['resources']
+                resource = collection.find_one({'_id': ObjectId(id)})
+                
+                # Forbid author from saving own resource
+                if request.user.username == resource['author']:
+                    return HttpResponse('Forbidden', status=403)
+                
                 profile = request.user.profile
                 if id not in profile.saved_resources:
                     profile.saved_resources.append(id)
@@ -174,34 +241,109 @@ def get_resource(request, id):
             else:
                 return HttpResponse('Unauthorized', status=401)
             
-        # To be tested
-        if data['action'] == 'rate':
-            data = json.loads(request.body)
-            if request.user.is_authenticated:
-                rating = int(request.POST.get('rating'))
-                resource = collection.find_one({'_id': ObjectId(id)})
-                stars_total = resource['stars_total'] + rating
-                raters = resource['raters'] + 1
-                star_rating = stars_total / raters
-                collection.update_one({'_id': ObjectId(id)}, {'$set': {'stars_total': stars_total, 'star_rating': star_rating, 'raters': raters}})
-                return redirect('/resource/'+id)
-            else:
-                return redirect('/login?next=/resource/'+id)
         
-        # To be tested    
-        if data['action'] == 'comment':
-            data = json.loads(request.body)
+        if data['action'] == 'rate':
             if request.user.is_authenticated:
-                comment = request.POST.get('comment')
+                dbname = client['skillupdb']
+                collection = dbname['resources']
+
+                if data['rating'] == '':
+                    messages.error(request, 'Stars cannot be empty!')
+                    return HttpResponse('Stars cannot be empty!', status=400)
+
+                rating = int(data['rating'])
                 resource = collection.find_one({'_id': ObjectId(id)})
-                comments = resource['comments']
-                comments.append({'author': request.user.username, 'comment': comment})
-                collection.update_one({'_id': ObjectId(id)}, {'$set': {'comments': comments}})
-                return redirect('/resource/'+id)
+
+                # Forbid author from rating own resource
+                if request.user.username == resource['author']:
+                    return HttpResponse('Forbidden', status=403)
+
+                if request.user.username in resource['ratings']:
+                    old_rating = resource['ratings'][request.user.username]
+                    resource['ratings'][request.user.username] = rating
+                    resource['stars_total'] = resource['stars_total'] - old_rating + rating
+                else:
+                    resource['ratings'][request.user.username] = rating
+                    resource['stars_total'] = resource['stars_total'] + rating
+                    resource['raters'] = resource['raters'] + 1
+                
+                resource['star_rating'] = resource['stars_total'] / resource['raters']
+                collection.update_one({'_id': ObjectId(id)}, {'$set': {'ratings': resource['ratings'], 'stars_total': resource['stars_total'], 'star_rating': resource['star_rating'], 'raters': resource['raters']}})
+
+                return HttpResponse('Success')
             else:
-                return redirect('/login?next=/resource/'+id)
+                return HttpResponse('Unauthorized', status=401)
+        
+            
+        if data['action'] == 'comment':
+            if request.user.is_authenticated:
+                dbname = client['skillupdb']
+                collection = dbname['resources']
+                
+                if data['comment_text'] == '':
+                    messages.error(request, 'Comment cannot be empty!')
+                    return HttpResponse('Comment cannot be empty!', status=400)
+                
+                comment_text = data['comment_text']
+                comment = { 'author': request.user.username, 'date': datetime.now(), 'text': comment_text}
+                resource = collection.find_one({'_id': ObjectId(id)})
+                resource['comments'].append(comment)
+
+                try:
+                    collection.update_one({'_id': ObjectId(id)}, {'$set': {'comments': resource['comments']}})
+                    return HttpResponse('Success')
+                except Exception as e:
+                    print(e)
+                    return HttpResponse('Error saving comment!', status=500)    
+                
+            else:
+                return HttpResponse('Unauthorized', status=401)
+            
+    if request.method == 'DELETE':
+        data = json.loads(request.body)
+
+        if data['action'] == 'delete':
+            if request.user.is_authenticated:
+                dbname = client['skillupdb']
+                collection = dbname['resources']
+                resource = collection.find_one({'_id': ObjectId(id)})
+
+                if request.user.username == resource['author']:
+                    collection.delete_one({'_id': ObjectId(id)})
+
+                    # Remove resource from profile
+                    profile = request.user.profile 
+                    profile.created_resources.remove(id)
+                    profile.save()
+
+                    # Remove resource from saved resources of all users
+                    users = User.objects.all()
+                    
+                    for user in users:
+                        if id in user.profile.saved_resources:
+                            user.profile.saved_resources.remove(id)
+                            user.profile.save()
+
+                    return HttpResponse('Success')
+                else:
+                    return HttpResponse('Forbidden', status=403)
+            else:
+                return HttpResponse('Unauthorized', status=401)
+                   
+        if data['action'] == 'remove_from_profile':
+            if request.user.is_authenticated:
+                profile = request.user.profile
+                if id in profile.saved_resources:
+                    profile.saved_resources.remove(id)
+                    profile.save()
+                return HttpResponse('Success')
+            else:
+                return HttpResponse('Unauthorized', status=401)
     
-    
+'''
+    Print all resources in the database
+    Mainly for debugging purposes
+'''    
 def get_resources(request):
     dbname = client['skillupdb']
     collection = dbname['resources']
@@ -211,13 +353,13 @@ def get_resources(request):
         print(resource)     
     return HttpResponse("<h1>Resources fetched successfully!</h1>")
 
-# Text index for search based on description and subjects
+# Text index for search based on description, subjects and title
 def create_text_index():
     dbname = client['skillupdb']
     collection = dbname['resources']
     collection.create_index([('description', 'text'), ('subjects', 'text'), ('title', 'text')]) 
     
-
+# Create text index if it does not exist
 create_text_index()
 
 

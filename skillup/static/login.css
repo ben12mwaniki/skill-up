@@ -16,7 +16,8 @@ body {
 }
 
 .dark-mode .form-control::placeholder {
-    color: #bbbbbb; /* Light gray placeholder text */
+    color: #bbbbbb;
+    /* Light gray placeholder text */
 }
 
 .dark-mode .btn,
@@ -27,19 +28,6 @@ body {
 
 .header-container {
     margin-top: 50px;
-}
-
-.toggle-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    padding: 5px 10px;
-    font-size: 12px;
-    border: none;
-    border-radius: 5px;
-    background-color: #000000;
-    color: #ffffff;
 }
 
 .form-container {
@@ -59,7 +47,8 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    margin-top: 10px; /* Added margin-top for spacing */
+    margin-top: 10px;
+    /* Added margin-top for spacing */
 }
 
 .form-control,

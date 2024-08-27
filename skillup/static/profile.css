@@ -10,12 +10,6 @@ body {
     padding: 60px 0;
 }
 
-.topcorner{
-    position:absolute;
-    top:0;
-    right:0;
-   }
-   
 .about-section {
     background-color: #fff;
 }
@@ -37,7 +31,9 @@ body {
     width: 50%;
 }
 
-.about-text h3, .about-text h6, .about-text p {
+.about-text h3,
+.about-text h6,
+.about-text p {
     margin: 10px 0;
 }
 
