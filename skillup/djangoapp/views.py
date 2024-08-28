@@ -126,13 +126,18 @@ def create_resource(request):
 '''    
 def login_view(request):
     if request.method == 'POST':
+        
+        # If another user is already logged in, log them out
+        if request.user.is_authenticated or 'user' in request.session:
+            logout(request)
+
         username = request.POST.get('user_name')
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
-        
+
         if user is not None:
-            login(request)
+            login(request, user)
             if request.GET.get('next') != None:
                 return redirect(request.GET.get('next'))
             else: 
@@ -157,7 +162,17 @@ def callback(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('/')
+    return redirect(
+        f"https://{settings.AUTH0_DOMAIN}/v2/logout?"
+        + urlencode(
+            {
+                "returnTo": request.build_absolute_uri(reverse("index")),
+                "client_id": settings.AUTH0_CLIENT_ID,
+            },
+            quote_via=quote_plus,
+        ),
+    )
+    
 
 '''
     Render the profile page
@@ -389,69 +404,6 @@ def create_text_index():
     
 # Create text index if it does not exist
 create_text_index()
-
-
-# # Authlib handling application
-
-# oauth = OAuth()
-
-# oauth.register(
-#     "auth0",
-#     client_id=settings.AUTH0_CLIENT_ID,
-#     client_secret=settings.AUTH0_CLIENT_SECRET,
-#     client_kwargs={
-#         "scope": "openid profile email",
-#     },
-#     server_metadata_url=f"https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration",
-# )
-
-# # Redirected to AuthO
-
-# def login(request):
-#     return oauth.auth0.authorize_redirect(
-#         request, request.build_absolute_uri(reverse("callback"))
-#     )
-
-# # Saving user session
-
-# def callback(request):
-#     token = oauth.auth0.authorize_access_token(request)
-#     request.session["user"] = token
-#     return redirect(request.build_absolute_uri(reverse("index")))
-
-# # Clearing user session
-
-# def logout(request):
-#     request.session.clear()
-
-#     return redirect(
-#         f"https://{settings.AUTH0_DOMAIN}/v2/logout?"
-#         + urlencode(
-#             {
-#                 "returnTo": request.build_absolute_uri(reverse("index")),
-#                 "client_id": settings.AUTH0_CLIENT_ID,
-#             },
-#             quote_via=quote_plus,
-#         ),
-#     )
-
-# # Home route 
-
-# def index(request):
-#     return render(
-#         request,
-#         "index.html",
-#         context={
-#             "session": request.session.get("user"),
-#             "pretty": json.dumps(request.session.get("user"), indent=4),
-#         },
-#     )
-
-
-
-
-
-
 
 
 
