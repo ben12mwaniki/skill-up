@@ -15,14 +15,13 @@ from dotenv import load_dotenv
 import dj_database_url
 import os
 
-# AuthO
-from dotenv import load_dotenv, find_dotenv
+
 
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATE_DIR = os.path.join(BASE_DIR, "webappexample", "templates")
+TEMPLATE_DIR = os.path.join(BASE_DIR, "skillup", "templates")
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,7 +31,7 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "webappexample", "templates")
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['https://skillup-1-a33a20b30d96.herokuapp.com', 'http://skillup-1-a33a20b30d96.herokuapp.com/', 'http://127.0.0.1:8000','127.0.0.1','localhost','skillup-1-a33a20b30d96.herokuapp.com']
 CSRF_TRUSTED_ORIGINS = ['https://skillup-1-a33a20b30d96.herokuapp.com', 'http://skillup-1-a33a20b30d96.herokuapp.com'] 
@@ -141,13 +140,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 
-# Load environment definition file
-ENV_FILE = find_dotenv()
-if ENV_FILE:
-    load_dotenv(ENV_FILE)
-
 
 # Load Auth0 application settings into memory
-AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
-AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
-AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
+AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')
+AUTH0_CLIENT_ID = os.getenv('AUTH0_CLIENT_ID')
+AUTH0_CLIENT_SECRET = os.getenv('AUTH0_CLIENT_SECRET')

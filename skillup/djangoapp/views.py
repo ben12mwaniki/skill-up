@@ -1,14 +1,18 @@
+from authlib.integrations.django_client import OAuth
 from bson.objectid import ObjectId
 from datetime import datetime
-from django.shortcuts import render
+from django.conf import settings
+from django.shortcuts import render, redirect
+
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from djangoapp.models import Profile
-from django.shortcuts import redirect
+from django.urls import reverse
 from django.db.utils import IntegrityError
+from urllib.parse import quote_plus, urlencode
 import pymongo
 import os
 import json
@@ -17,6 +21,17 @@ load_dotenv()
 
 # Connect to MongoDB
 client = pymongo.MongoClient(os.getenv('MONGO_URI'))
+oauth = OAuth()
+
+oauth.register(
+    "auth0",
+    client_id=settings.AUTH0_CLIENT_ID,
+    client_secret=settings.AUTH0_CLIENT_SECRET,
+    client_kwargs={
+        "scope": "openid profile email",
+    },
+    server_metadata_url=f"https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration",
+)
 
 # Render the home page
 def index(request):
@@ -127,6 +142,19 @@ def login_view(request):
     if request.method == 'GET':
         return render(request, 'login.html')
     
+# Auth0 login    
+def login_oAuth(request):
+    print('logging in with auth0')
+    return oauth.auth0.authorize_redirect(
+        request, request.build_absolute_uri(reverse("callback"))
+    )
+
+# Auth0 callback
+def callback(request):
+    token = oauth.auth0.authorize_access_token(request)
+    request.session["user"] = token
+    return redirect(request.build_absolute_uri(reverse("index")))
+
 def logout_view(request):
     logout(request)
     return redirect('/')
@@ -363,61 +391,61 @@ def create_text_index():
 create_text_index()
 
 
-# Authlib handling application
+# # Authlib handling application
 
-oauth = OAuth()
+# oauth = OAuth()
 
-oauth.register(
-    "auth0",
-    client_id=settings.AUTH0_CLIENT_ID,
-    client_secret=settings.AUTH0_CLIENT_SECRET,
-    client_kwargs={
-        "scope": "openid profile email",
-    },
-    server_metadata_url=f"https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration",
-)
+# oauth.register(
+#     "auth0",
+#     client_id=settings.AUTH0_CLIENT_ID,
+#     client_secret=settings.AUTH0_CLIENT_SECRET,
+#     client_kwargs={
+#         "scope": "openid profile email",
+#     },
+#     server_metadata_url=f"https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration",
+# )
 
-# Redirected to AuthO
+# # Redirected to AuthO
 
-def login(request):
-    return oauth.auth0.authorize_redirect(
-        request, request.build_absolute_uri(reverse("callback"))
-    )
+# def login(request):
+#     return oauth.auth0.authorize_redirect(
+#         request, request.build_absolute_uri(reverse("callback"))
+#     )
 
-# Saving user session
+# # Saving user session
 
-def callback(request):
-    token = oauth.auth0.authorize_access_token(request)
-    request.session["user"] = token
-    return redirect(request.build_absolute_uri(reverse("index")))
+# def callback(request):
+#     token = oauth.auth0.authorize_access_token(request)
+#     request.session["user"] = token
+#     return redirect(request.build_absolute_uri(reverse("index")))
 
-# Clearing user session
+# # Clearing user session
 
-def logout(request):
-    request.session.clear()
+# def logout(request):
+#     request.session.clear()
 
-    return redirect(
-        f"https://{settings.AUTH0_DOMAIN}/v2/logout?"
-        + urlencode(
-            {
-                "returnTo": request.build_absolute_uri(reverse("index")),
-                "client_id": settings.AUTH0_CLIENT_ID,
-            },
-            quote_via=quote_plus,
-        ),
-    )
+#     return redirect(
+#         f"https://{settings.AUTH0_DOMAIN}/v2/logout?"
+#         + urlencode(
+#             {
+#                 "returnTo": request.build_absolute_uri(reverse("index")),
+#                 "client_id": settings.AUTH0_CLIENT_ID,
+#             },
+#             quote_via=quote_plus,
+#         ),
+#     )
 
-# Home route 
+# # Home route 
 
-def index(request):
-    return render(
-        request,
-        "index.html",
-        context={
-            "session": request.session.get("user"),
-            "pretty": json.dumps(request.session.get("user"), indent=4),
-        },
-    )
+# def index(request):
+#     return render(
+#         request,
+#         "index.html",
+#         context={
+#             "session": request.session.get("user"),
+#             "pretty": json.dumps(request.session.get("user"), indent=4),
+#         },
+#     )
 
 
 

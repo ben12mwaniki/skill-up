@@ -6,6 +6,7 @@ urlpatterns = [
     path('create_user',views.create_user,name='create_user'),
     path('create_resource',views.create_resource,name='create_resource'),
     path('login/',views.login_view,name='login'),
+    path('login_oAuth/',views.login_oAuth,name='login_oAuth'),
     path('logout/',views.logout_view,name='logout'),
     path('search-results',views.search,name='search-results'),
     path('profile',views.profile,name='profile'),
