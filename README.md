@@ -2,7 +2,7 @@
 # skillUp
 ## Introduction
 This application is a platform for developers to create and share learning resources (video, book, course, blog, podcast, forum etc). The resources are shared as a hyperlink and additional details can be added when the resource is created to help with querying. No account is needed to search resources. However, an account is necessary to be able to create, save or rate a resource. 
-The web app can be found [here](https://skillup-1-a33a20b30d96.herokuapp.com/).
+The web app can be found [here](https://skill-up-pf3i.onrender.com/).
 
 ## Prerequisites
 * Python 3
