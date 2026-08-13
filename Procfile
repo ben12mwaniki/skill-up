@@ -1,1 +1,0 @@
-web: cd skillup; gunicorn skillup.wsgi
