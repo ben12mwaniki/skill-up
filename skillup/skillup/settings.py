@@ -88,9 +88,12 @@ WSGI_APPLICATION = 'skillup.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': 
-           dj_database_url.config(default=os.getenv('POSTGRES_URI'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg',
+        **dj_database_url.config(default=os.getenv('POSTGRES_URI'))
+    }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
