@@ -183,22 +183,20 @@ Authors can delete their own resources. When a resource is deleted, it is also r
 
 SkillUp is a completed personal project demonstrating full-stack web development with Django, PostgreSQL, and MongoDB.
 
-Potential future improvements include:
-
-## Future Improvements
+### Future Improvements
 * Semantic search — Add vector-based search to identify resources based on the meaning and context of a user's query rather than relying solely on keyword matching.
 * Improved result ranking — Rank search results using resource ratings alongside search relevance, allowing highly rated resources to receive greater visibility while remaining relevant to the user's query.
 * Social authentication — Allow users to register and sign in using third-party identity providers.
 * Personalized recommendations — Recommend resources based on user activity, saved resources, and other engagement signals.
 * Persistent UI preferences — Retain interface preferences such as dark mode across sessions and navigation.
 
-## Known Issues
+### Known Issues
 
 * Dark mode preferences are not currently retained when navigating between pages.
 * The application currently relies on separate PostgreSQL and MongoDB databases, which adds deployment and configuration requirements.
 
 ## Contributors
-* Ben Mwaniki (Project Lead)
+* Ben Mwaniki 
 * Yuvraj Singh 
 
 ## License
